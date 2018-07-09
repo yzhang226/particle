@@ -1,0 +1,50 @@
+beanTemplate(bean, options)
+::= <<
+package <bean.packageName>;
+
+<! required class names !>
+<bean.requiredClassNames:{name|import <name>;};separator="\n">
+
+/**
+ * <bean.comment>
+ * Created by <options.currentUserName> on <options.currentDate>.
+ */
+public class <bean.beanName> <if(bean.extendClassName)>extend <bean.extendClassName><endif> {
+
+<! all bean properties oneProperty() !>
+<bean.properties:outPropertyDefinition(options);separator="\n">
+
+<if(!options.enableLombok)>
+<bean.properties:outPropertyGetterSetter(options);separator="\n">
+<endif>
+
+}
+
+>>
+
+outPropertyDefinition(prop, options)
+::= <<
+    /**
+     * <prop.comment>
+     * <if(prop.defaultValue)>默认值: <prop.defaultValue><endif>
+     */
+    <if(options.enableLombok)>
+    @Getter
+    @Setter
+    <endif>
+    private <prop.propertyType.simpleName> <prop.propertyName>;
+
+>>
+
+outPropertyGetterSetter(prop, options)
+::= <<
+
+    public <prop.propertyType.simpleName> get<prop.propertyNameUpperCamelCase>() {
+        return <prop.propertyName>;
+    }
+
+    public void set<prop.propertyNameUpperCamelCase>(<prop.propertyType.simpleName> <prop.propertyName>) {
+        this.<prop.propertyName> = <prop.propertyName>;
+    }
+
+>>

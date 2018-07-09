@@ -57,6 +57,10 @@ public class BeanProperty {
         this.allowNull = allowNull;
     }
 
+    /**
+     * 属性名-首字母大写
+     * @return
+     */
     public String getPropertyNameUpperCamelCase() {
         return StringUtils.capitalize(getPropertyName());
     }

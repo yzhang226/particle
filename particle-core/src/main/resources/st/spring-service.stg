@@ -1,0 +1,36 @@
+beanTemplate(bean, options)
+::= <<
+package <bean.packageName>;
+
+<! required class names !>
+<bean.requiredClassNames:{name|import <name>;};separator="\n">
+
+/**
+ * <bean.comment>
+ * Created by <options.currentUserName> on <options.currentDate>.
+ */
+@Service
+public class <bean.beanName> <if(bean.extendClassName)>extend <bean.extendClassName><endif> <if(bean.interfaceNames)>implements <bean.interfaceNames:{name|<name>};separator=", "><endif> {
+
+    @Autowired
+    private <bean.beanName>Dao <bean.beanNameLowerCamelCase>Dao;
+
+    protected <bean.beanName>Dao getCrudDao() {
+        return <bean.beanNameLowerCamelCase>Dao;
+    }
+
+    /**
+     * 保存<code>request</code>
+     * @param request
+     * @return 新增的数据的行主键(如果主键是自增)
+     */
+    public ${table.pk.fieldType.simpleName} save(${table.beanName}Request request) {
+        ${table.beanName}Bean bean = BeanUtil.copy(request, ${table.beanName}Bean.class);
+        saveBean(bean);
+        request.set${table.pk.fieldName?cap_first}(bean.get${table.pk.fieldName?cap_first}());
+        return bean.get${table.pk.fieldName?cap_first}();
+    }
+
+}
+
+>>

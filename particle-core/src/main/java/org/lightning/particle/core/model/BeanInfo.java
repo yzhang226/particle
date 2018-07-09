@@ -1,10 +1,9 @@
 package org.lightning.particle.core.model;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +25,11 @@ public class BeanInfo {
     private String beanName;
 
     /**
+     * 注释
+     */
+    private String comment;
+
+    /**
      *
      */
     private List<BeanProperty> properties;
@@ -33,6 +37,24 @@ public class BeanInfo {
     /**
      * 导入需要的依赖Classes
      */
-    private Set<Class<?>> requiredClasses;
+    private Set<String> requiredClassNames;
+
+    /**
+     * 继承的类名
+     */
+    private String extendClassName;
+
+    /**
+     * 实现的接口(s)
+     */
+    private List<String> interfaceNames;
+
+    /**
+     * beanName-首字母小写
+     * @return
+     */
+    public String getBeanNameLowerCamelCase() {
+        return StringUtils.capitalize(getBeanName());
+    }
 
 }
