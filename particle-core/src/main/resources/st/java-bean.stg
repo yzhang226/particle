@@ -9,13 +9,19 @@ package <bean.packageName>;
  * <bean.comment>
  * Created by <options.currentUserName> on <options.currentDate>.
  */
-public class <bean.beanName> <if(bean.extendClassName)>extend <bean.extendClassName><endif> {
+<bean.annotationNames:{name|@<name>};separator="\n">
+public class <bean.beanName> <if(bean.extendClassName)>extend <bean.extendClassName><if(bean.extendClassGenericTypes)>\<<bean.extendClassGenericTypes:{name|<name>};separator=", ">\><endif><endif> <\\>
+<if(bean.interfaceNames)>implements <bean.interfaceNames:{name|<name>};separator=", "><endif> {
 
 <! all bean properties oneProperty() !>
 <bean.properties:outPropertyDefinition(options);separator="\n">
 
-<if(!options.enableLombok)>
+<if(options.enableGetterSetter&&!options.enableLombok)>
 <bean.properties:outPropertyGetterSetter(options);separator="\n">
+<endif>
+
+<if(bean.methods)>
+<bean.methods:outMethod();separator="\n">
 <endif>
 
 }
@@ -28,11 +34,8 @@ outPropertyDefinition(prop, options)
      * <prop.comment>
      * <if(prop.defaultValue)>默认值: <prop.defaultValue><endif>
      */
-    <if(options.enableLombok)>
-    @Getter
-    @Setter
-    <endif>
-    private <prop.propertyType.simpleName> <prop.propertyName>;
+    <prop.annotationNames:{name|@<name>};separator="\n">
+    private <prop.propertyTypeName> <prop.propertyName><if(prop.defaultValue)> = <prop.defaultValue><endif>;
 
 >>
 
@@ -48,3 +51,20 @@ outPropertyGetterSetter(prop, options)
     }
 
 >>
+
+outMethod(method)
+::= <<
+
+    <method.annotationNames:{name|@<name>};separator="\n">
+    <method.modifiers:{name|<name>};separator=" "> <method.returnTypeName> <method.methodName>(<if(method.parameters)><method.parameters:outMethodParameter();separator=", "><endif>) {
+        <method.methodContent>
+    }
+
+>>
+
+outMethodParameter(parameter)
+::= <<
+<parameter.parameterType><if(bean.interfaceNames)>\<<parameter.genericTypes:{name|<name>};separator=", ">\><endif> parameterName
+>>
+
+outParameter

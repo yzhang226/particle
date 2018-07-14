@@ -30,6 +30,11 @@ public class GenerateOptions {
     private boolean enableLombok;
 
     /**
+     * 启用Getter Setter
+     */
+    private boolean enableGetterSetter;
+
+    /**
      *
      */
     private List<Class<?>> externalClasses;

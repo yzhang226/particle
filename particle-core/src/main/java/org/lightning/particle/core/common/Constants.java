@@ -10,5 +10,15 @@ public interface Constants {
      */
     String TEMPLATE_NAME_KEY_DEFAULT = "__default_template_name__";
 
+    /**
+     *
+     */
+    String TEMPLATE_NAME_JAVA_BEAN = "beanTemplate";
+
+    /**
+     * java-bean之st模板路径
+     */
+    String TEMPLATE_PATH_JAVA_BEAN = "st/java-bean.stg";
+
 
 }

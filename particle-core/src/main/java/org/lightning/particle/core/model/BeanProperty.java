@@ -1,9 +1,12 @@
 package org.lightning.particle.core.model;
 
+import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 /**
  * Created by cook at 2018/7/8
@@ -18,9 +21,9 @@ public class BeanProperty {
     private String propertyName;
 
     /**
-     * 类型
+     * 类型 - example: int, String
      */
-    private Class<?> propertyType;
+    private String propertyTypeName;
 
     /**
      * 注释
@@ -40,6 +43,11 @@ public class BeanProperty {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private boolean allowNull;
+
+    /**
+     * 属性的注解(s)
+     */
+    private List<String> annotationNames = Lists.newArrayList();
 
     public String getDefaultValue() {
         return defaultValue;
@@ -63,6 +71,14 @@ public class BeanProperty {
      */
     public String getPropertyNameUpperCamelCase() {
         return StringUtils.capitalize(getPropertyName());
+    }
+
+    /**
+     *
+     * @param annoName
+     */
+    public void addAnnotationName(String annoName) {
+        annotationNames.add(annoName);
     }
 
 }
