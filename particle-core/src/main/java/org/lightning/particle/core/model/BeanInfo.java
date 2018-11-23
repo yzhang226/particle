@@ -2,11 +2,13 @@ package org.lightning.particle.core.model;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Singular;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -69,6 +71,12 @@ public class BeanInfo {
     private List<BeanMethod> methods = Lists.newArrayList();
 
     /**
+     * 类修饰符(s), for example - public static final
+     */
+    @Getter(AccessLevel.NONE)
+    private List<String> modifiers = null;
+
+    /**
      * beanName-首字母小写
      * @return
      */
@@ -101,5 +109,23 @@ public class BeanInfo {
         methods.add(method);
     }
 
+    /**
+     *
+     * @param modifier
+     */
+    public void addModifier(String modifier) {
+        if (modifiers == null) {
+            modifiers = Lists.newArrayList();
+        }
+        modifiers.add(modifier);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<String> getModifiers() {
+        return modifiers == null ? Collections.singletonList("public") : modifiers;
+    }
 
 }

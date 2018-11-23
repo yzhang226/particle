@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,6 +50,12 @@ public class BeanProperty {
      */
     private List<String> annotationNames = Lists.newArrayList();
 
+    /**
+     * 方法修饰符(s), for example - public static final
+     */
+    @Getter(AccessLevel.NONE)
+    private List<String> modifiers = null;
+
     public String getDefaultValue() {
         return defaultValue;
     }
@@ -79,6 +86,25 @@ public class BeanProperty {
      */
     public void addAnnotationName(String annoName) {
         annotationNames.add(annoName);
+    }
+
+    /**
+     *
+     * @param modifier
+     */
+    public void addModifier(String modifier) {
+        if (modifiers == null) {
+            modifiers = Lists.newArrayList();
+        }
+        modifiers.add(modifier);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<String> getModifiers() {
+        return modifiers == null ? Collections.singletonList("private") : modifiers;
     }
 
 }

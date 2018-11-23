@@ -1,9 +1,11 @@
 package org.lightning.particle.core.model;
 
 import com.google.common.collect.Lists;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,7 +28,8 @@ public class BeanMethod {
     /**
      * 方法修饰符(s), for example - public static final
      */
-    private List<String> modifiers = Lists.newArrayList();
+    @Getter(AccessLevel.NONE)
+    private List<String> modifiers = null;
 
     /**
      * 方法内容
@@ -64,8 +67,18 @@ public class BeanMethod {
      * @param modifier
      */
     public void addModifier(String modifier) {
+        if (modifiers == null) {
+            modifiers = Lists.newArrayList();
+        }
         modifiers.add(modifier);
     }
 
+    /**
+     *
+     * @return
+     */
+    public List<String> getModifiers() {
+        return modifiers == null ? Collections.singletonList("public") : modifiers;
+    }
 
 }

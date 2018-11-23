@@ -10,7 +10,7 @@ package <bean.packageName>;
  * Created by <options.currentUserName> on <options.currentDate>.
  */
 <bean.annotationNames:{name|@<name>};separator="\n">
-public class <bean.beanName> <if(bean.extendClassName)>extend <bean.extendClassName><if(bean.extendClassGenericTypes)>\<<bean.extendClassGenericTypes:{name|<name>};separator=", ">\><endif><endif> <\\>
+<bean.modifiers:{name|<name>};separator=" "> class <bean.beanName> <if(bean.extendClassName)>extend <bean.extendClassName><if(bean.extendClassGenericTypes)>\<<bean.extendClassGenericTypes:{name|<name>};separator=", ">\><endif><endif> <\\>
 <if(bean.interfaceNames)>implements <bean.interfaceNames:{name|<name>};separator=", "><endif> {
 
 <! all bean properties oneProperty() !>
@@ -32,10 +32,12 @@ outPropertyDefinition(prop, options)
 ::= <<
     /**
      * <prop.comment>
-     * <if(prop.defaultValue)>默认值: <prop.defaultValue><endif>
+<if(prop.defaultValue)>
+     * 默认值: <prop.defaultValue>
+<endif>
      */
     <prop.annotationNames:{name|@<name>};separator="\n">
-    private <prop.propertyTypeName> <prop.propertyName><if(prop.defaultValue)> = <prop.defaultValue><endif>;
+    <prop.modifiers:{name|<name>};separator=" "> <prop.propertyTypeName> <prop.propertyName><if(prop.defaultValue)> = <prop.defaultValue><endif>;
 
 >>
 
