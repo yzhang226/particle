@@ -2,11 +2,9 @@ package org.lightning.particle.jdbc.meta;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.lightning.particle.jdbc.common.meta.Column;
-import org.lightning.particle.jdbc.common.meta.PrimaryKey;
-import org.lightning.particle.jdbc.common.meta.Table;
+import org.lightning.particle.core.jdbc.meta.Column;
+import org.lightning.particle.core.jdbc.meta.PrimaryKey;
+import org.lightning.particle.core.jdbc.meta.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +38,8 @@ public class JdbcMetadataFetcher implements MetadataFetcher {
 
             table.setPrimaryKeys(pks);
             table.setColumns(columns);
+
+            table.buildColumnOfPrimaryKey();
 
             return table;
         } catch (SQLException e) {

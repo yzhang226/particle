@@ -18,6 +18,8 @@ public class DataSourceParam {
     /** Format of the string must be [propertyName=property;]* */
     private String connectionProperties;
 
+    private String databaseName;
+
     /**
      * 初始连接数
      */

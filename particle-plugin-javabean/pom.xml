@@ -17,6 +17,11 @@
             <artifactId>particle-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.lightning.particle</groupId>
+            <artifactId>particle-jdbc-meta</artifactId>
+        </dependency>
+
 
     </dependencies>
 

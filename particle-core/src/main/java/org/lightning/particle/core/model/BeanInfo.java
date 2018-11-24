@@ -77,11 +77,28 @@ public class BeanInfo {
     private List<String> modifiers = null;
 
     /**
+     * 是否启用lombok简写
+     */
+    private boolean enableLombok;
+
+    /**
+     * 启用Getter Setter
+     */
+    private boolean enableGetterSetter;
+
+    // for jdbc
+    private BeanProperty pkProperty;
+
+    private String tableName;
+
+    private String entityName;
+
+    /**
      * beanName-首字母小写
      * @return
      */
-    public String getBeanNameLowerCamelCase() {
-        return StringUtils.capitalize(getBeanName());
+    public String getUncapitalizeBeanName() {
+        return StringUtils.uncapitalize(getBeanName());
     }
 
     /**
@@ -99,6 +116,14 @@ public class BeanInfo {
      */
     public void addRequiredClassName(String className) {
         requiredClassNames.add(className);
+    }
+
+    public void addProperty(BeanProperty property) {
+        if (properties == null) {
+            properties = Lists.newArrayList();
+        }
+
+        properties.add(property);
     }
 
     /**
@@ -125,7 +150,34 @@ public class BeanInfo {
      * @return
      */
     public List<String> getModifiers() {
-        return modifiers == null ? Collections.singletonList("public") : modifiers;
+        if (modifiers == null) {
+            modifiers = Lists.newArrayList();
+            modifiers.add("public");
+            modifiers.add("class");
+        }
+        return modifiers;
+    }
+
+    /**
+     * 全称 - 包名 + 类名
+     * @return
+     */
+    public String getFullBeanName() {
+        return packageName + "." + beanName;
+    }
+
+    public String getUriName() {
+        StringBuilder sb = new StringBuilder();
+        String uriName = tableName.replace("_", "-");
+        char[] arr = uriName.toCharArray();
+        for (char c : arr) {
+            if (Character.isUpperCase(c)) {
+                sb.append("-").append(Character.toLowerCase(c));
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 
 }

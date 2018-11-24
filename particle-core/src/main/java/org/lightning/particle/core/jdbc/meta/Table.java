@@ -1,4 +1,4 @@
-package org.lightning.particle.jdbc.common.meta;
+package org.lightning.particle.core.jdbc.meta;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -74,5 +74,29 @@ public class Table {
      * 所有列
      */
     private List<Column> columns;
+
+    /**
+     * 主键列
+     */
+    private Column pkColumn;
+
+    /**
+     * 构建主键信息
+     */
+    public void buildColumnOfPrimaryKey() {
+        PrimaryKey pk = primaryKeys.get(0);
+        for (Column column : columns) {
+            if (column.getColumnName().equals(pk.getColumnName())) {
+                if (pkColumn == null) {
+                    pkColumn = column;
+                    column.setPrimaryKey(true);
+                }
+            }
+        }
+    }
+
+    public Column getPkColumn() {
+        return pkColumn;
+    }
 
 }

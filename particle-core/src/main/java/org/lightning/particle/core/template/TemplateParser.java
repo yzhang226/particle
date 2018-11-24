@@ -7,10 +7,9 @@ public interface TemplateParser {
 
     /**
      * 渲染模板
-     * @param templateFilePath
      * @param context
      * @return
      */
-    String render(String templateFilePath, TemplateContext context);
+    String render(TemplateContext context);
 
 }

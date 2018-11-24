@@ -1,25 +1,32 @@
 package org.lightning.particle.core.template;
 
 import com.google.common.collect.Maps;
-import org.apache.commons.collections4.MapUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Collections;
 import java.util.Map;
 
 /**
  * Created by cook at 2018/7/9
  */
 
+@Getter
+@Setter
 public class TemplateContext {
 
+    private String templatePath;
+
+    private String templateName;
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private Map<String, Object> context;
 
-    public TemplateContext() {
-        this(null);
-    }
-
-    public TemplateContext(Map<String, Object> context) {
-        this.context = MapUtils.isEmpty(context) ? Maps.newHashMap() : Maps.newHashMap(context);
+    public TemplateContext(String templatePath, String templateName) {
+        this.templatePath = templatePath;
+        this.templateName = templateName;
+        this.context = Maps.newHashMap();
     }
 
     /**
@@ -64,7 +71,7 @@ public class TemplateContext {
      * @return
      */
     public Map<String, Object> getContext() {
-        return MapUtils.isEmpty(context) ? Collections.emptyMap() : Maps.newHashMap(context);
+        return Maps.newHashMap(context);
     }
 
 }

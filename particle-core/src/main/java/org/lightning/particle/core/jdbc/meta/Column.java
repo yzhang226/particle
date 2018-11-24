@@ -1,4 +1,4 @@
-package org.lightning.particle.jdbc.common.meta;
+package org.lightning.particle.core.jdbc.meta;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -111,4 +111,10 @@ public class Column extends BaseColumn {
      * empty string --- if it cannot be determined whether this is a generated column *
      */
     private String isGeneratedColumn;
+
+    /**
+     *
+     */
+    private boolean isPrimaryKey;
+
 }

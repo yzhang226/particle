@@ -18,6 +18,11 @@ public class BeanMethod {
     /**
      *
      */
+    private String comment;
+
+    /**
+     *
+     */
     private String methodName;
 
     /**
@@ -26,7 +31,7 @@ public class BeanMethod {
     private String returnTypeName;
 
     /**
-     * 方法修饰符(s), for example - public static final
+     * 方法修饰符(s), for example - public static final class
      */
     @Getter(AccessLevel.NONE)
     private List<String> modifiers = null;
@@ -78,7 +83,11 @@ public class BeanMethod {
      * @return
      */
     public List<String> getModifiers() {
-        return modifiers == null ? Collections.singletonList("public") : modifiers;
+        if (modifiers == null) {
+            modifiers = Lists.newArrayList();
+            modifiers.add("public");
+        }
+        return modifiers;
     }
 
 }

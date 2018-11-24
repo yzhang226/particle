@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.lightning.particle.core.jdbc.meta.Column;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +33,11 @@ public class BeanProperty {
     private String comment;
 
     /**
+     * 属性类型类全称 - example: java.lang.Integer, java.util.List
+     */
+    private String propertyTypeClass;
+
+    /**
      *
      */
     @Getter(AccessLevel.NONE)
@@ -55,6 +61,11 @@ public class BeanProperty {
      */
     @Getter(AccessLevel.NONE)
     private List<String> modifiers = null;
+
+    // for jdbc
+    private Column column;
+
+    private String jdbcTypeName;
 
     public String getDefaultValue() {
         return defaultValue;

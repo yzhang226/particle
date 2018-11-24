@@ -1,8 +1,8 @@
 package org.lightning.particle.jdbc.meta;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.lightning.particle.jdbc.common.meta.Column;
-import org.lightning.particle.jdbc.common.meta.Table;
+import org.lightning.particle.core.jdbc.meta.Column;
+import org.lightning.particle.core.jdbc.meta.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

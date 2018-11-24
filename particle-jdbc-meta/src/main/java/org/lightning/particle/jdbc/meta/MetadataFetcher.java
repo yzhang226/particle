@@ -1,10 +1,9 @@
 package org.lightning.particle.jdbc.meta;
 
-import org.lightning.particle.jdbc.common.meta.Column;
-import org.lightning.particle.jdbc.common.meta.PrimaryKey;
-import org.lightning.particle.jdbc.common.meta.Table;
+import org.lightning.particle.core.jdbc.meta.Column;
+import org.lightning.particle.core.jdbc.meta.PrimaryKey;
+import org.lightning.particle.core.jdbc.meta.Table;
 
-import javax.sql.DataSource;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.List;

@@ -1,25 +1,19 @@
 package org.lightning.particle.core.test;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
 import org.lightning.particle.core.common.GenerateOptions;
+import org.lightning.particle.core.common.StgTemplateNames;
 import org.lightning.particle.core.model.BeanInfo;
 import org.lightning.particle.core.model.BeanMethod;
 import org.lightning.particle.core.model.BeanProperty;
-import org.lightning.particle.core.template.STBeanTemplateContext;
 import org.lightning.particle.core.template.STTemplateParser;
 import org.lightning.particle.core.template.TemplateContext;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-
-import static org.lightning.particle.core.common.Constants.TEMPLATE_NAME_JAVA_BEAN;
-import static org.lightning.particle.core.common.Constants.TEMPLATE_PATH_JAVA_BEAN;
-import static org.lightning.particle.core.common.Constants.TEMPLATE_NAME_KEY_DEFAULT;
 
 /**
  * Created by cook at 2018/7/8
@@ -102,35 +96,38 @@ public class JavaBeanTemplateTest {
     @Test
     public void testJavaBean() {
         STTemplateParser parser = new STTemplateParser();
-        TemplateContext context = new TemplateContext();
-        BeanInfo info = createServiceBeanInfo();
+
         GenerateOptions options = createOptions();
-        Map<String, Object> con = ImmutableMap.of(TEMPLATE_NAME_KEY_DEFAULT, "beanTemplate"
-                                                    , "bean", info, "options", options);
-        context.addScopedVars(con);
+        BeanInfo info = createBeanInfo();
         if (options.isEnableGetterSetter() && options.isEnableLombok()) {
             info.addClassAnnotationName(Getter.class);
             info.addClassAnnotationName(Setter.class);
         }
-        String text = parser.render(TEMPLATE_PATH_JAVA_BEAN, context);
+
+        TemplateContext context = new TemplateContext(StgTemplateNames.JavaBean.TEMPLATE_PATH,
+                StgTemplateNames.JavaBean.TEMPLATE_NAME);
+        context.addScopedVar("bean", info);
+        context.addScopedVar("options", options);
+
+        String text = parser.render(context);
         System.out.println("text is " + text);
     }
 
-    @Test
-    public void testSpringService() {
-        STTemplateParser parser = new STTemplateParser();
-        BeanInfo beanInfo = createServiceBeanInfo();
-        beanInfo.addMethod(serviceMethod1());
-        beanInfo.addMethod(serviceMethod1());
-        GenerateOptions options = createOptions();
-
-        STBeanTemplateContext context = new STBeanTemplateContext();
-        context.setTemplateName(TEMPLATE_NAME_JAVA_BEAN);
-        context.setBeanInfo(beanInfo);
-        context.setGenerateOptions(options);
-
-        String text = parser.render(TEMPLATE_PATH_JAVA_BEAN, context);
-        System.out.println("text is " + text);
-    }
+//    @Test
+//    public void testSpringService() {
+//        STTemplateParser parser = new STTemplateParser();
+//        BeanInfo beanInfo = createServiceBeanInfo();
+//        beanInfo.addMethod(serviceMethod1());
+//        beanInfo.addMethod(serviceMethod1());
+//        GenerateOptions options = createOptions();
+//
+//        STBeanTemplateContext context = new STBeanTemplateContext();
+//        context.setTemplateName(StgTemplateNames.JavaBean.TEMPLATE_NAME);
+//        context.setBeanInfo(beanInfo);
+//        context.setGenerateOptions(options);
+//
+//        String text = parser.render(StgTemplateNames.JavaBean.TEMPLATE_PATH, context);
+//        System.out.println("text is " + text);
+//    }
 
 }

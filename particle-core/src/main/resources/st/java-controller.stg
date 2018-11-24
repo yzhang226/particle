@@ -1,0 +1,95 @@
+javaController(controller, po, request, response, service, options)
+::= <<
+package <controller.packageName>;
+
+import com.fxtech.panda.core.common.DataResult;
+import <po.fullBeanName>;
+import <request.fullBeanName>;
+import <response.fullBeanName>;
+import <service.fullBeanName>;
+import com.fxtech.panda.core.utils.DataResults;
+import com.fxtech.panda.spring.core.model.paging.PagingRequest;
+import com.fxtech.panda.spring.core.model.paging.PagingResponse;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+/**
+ * controller of <po.entityName> \<br>
+ * Created by <options.username> on <options.currentDate>.
+ */
+@Validated
+@RestController
+@RequestMapping(value="/v1/<po.uriName>")
+@Api(tags = "<po.entityName>")
+public class <po.entityName>Controller {
+
+    @Autowired
+    private <service.beanName> <service.uncapitalizeBeanName>;
+
+    /**
+     * 可以设置基础约束
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(tags = "<po.entityName>", value = "Get<po.entityName>ById", httpMethod = "GET",
+                  response = DataResult.class, notes = "通过主键获取<po.entityName>")
+    @GetMapping("/get")
+    public DataResult\<<response.beanName>\> getById(@NotNull @Min(1) @RequestParam Integer id) {
+        return DataResults.ok(<service.uncapitalizeBeanName>.getById(id));
+    }
+
+    /**
+     * 新增
+     *
+     * @param request
+     * @return 新增的数据的行主键(如果自增主键)
+     */
+    @ApiOperation(tags = "<po.entityName>", value = "Add<po.entityName>", httpMethod = "POST",
+                  response = DataResult.class, notes = "新增<po.entityName>")
+    @PostMapping("/add")
+    public DataResult\<<po.pkProperty.propertyTypeName>\> add(@RequestBody <request.beanName> request) {
+        return DataResults.ok(<service.uncapitalizeBeanName>.save(request));
+    }
+
+    /**
+     * 更新
+     *
+     * @param request
+     * @return 影响数据表的行数
+     */
+    @ApiOperation(tags = "<po.entityName>", value = "Update<po.entityName>ById", httpMethod = "POST",
+                  response = DataResult.class, notes = "更新<po.entityName>")
+    @PostMapping("/update")
+    public DataResult\<<po.pkProperty.propertyTypeName>\> update(@RequestBody <request.beanName> request) {
+        return DataResults.ok(<service.uncapitalizeBeanName>.update(request));
+    }
+
+    /**
+     * 按条件, 分页查询
+     *
+     * @param request
+     * @return 分页结果集
+     */
+    @ApiOperation(tags = "<po.entityName>", value = "Find<po.entityName>Paging", httpMethod = "POST",
+                  response = DataResult.class, notes = "分页查询<po.entityName>")
+    @PostMapping("/find-page")
+    public DataResult\<PagingResponse\<<response.beanName>\>> findPaging(@RequestBody PagingRequest\<<request.beanName>\> request) {
+        return DataResults.ok(<service.uncapitalizeBeanName>.findPaging(request));
+    }
+
+
+}
+
+>>
+
+

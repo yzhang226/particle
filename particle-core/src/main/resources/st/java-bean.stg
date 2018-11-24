@@ -1,4 +1,4 @@
-beanTemplate(bean, options)
+javaBean(bean, options)
 ::= <<
 package <bean.packageName>;
 
@@ -10,13 +10,13 @@ package <bean.packageName>;
  * Created by <options.currentUserName> on <options.currentDate>.
  */
 <bean.annotationNames:{name|@<name>};separator="\n">
-<bean.modifiers:{name|<name>};separator=" "> class <bean.beanName> <if(bean.extendClassName)>extend <bean.extendClassName><if(bean.extendClassGenericTypes)>\<<bean.extendClassGenericTypes:{name|<name>};separator=", ">\><endif><endif> <\\>
+<bean.modifiers:{name|<name>};separator=" "> <bean.beanName> <if(bean.extendClassName)>extends <bean.extendClassName><if(bean.extendClassGenericTypes)>\<<bean.extendClassGenericTypes:{name|<name>};separator=", ">\><endif><endif> <\\>
 <if(bean.interfaceNames)>implements <bean.interfaceNames:{name|<name>};separator=", "><endif> {
 
 <! all bean properties oneProperty() !>
 <bean.properties:outPropertyDefinition(options);separator="\n">
 
-<if(options.enableGetterSetter&&!options.enableLombok)>
+<if(bean.enableGetterSetter&&!bean.enableLombok)>
 <bean.properties:outPropertyGetterSetter(options);separator="\n">
 <endif>
 
@@ -56,7 +56,7 @@ outPropertyGetterSetter(prop, options)
 
 outMethod(method)
 ::= <<
-
+    <method.comment>
     <method.annotationNames:{name|@<name>};separator="\n">
     <method.modifiers:{name|<name>};separator=" "> <method.returnTypeName> <method.methodName>(<if(method.parameters)><method.parameters:outMethodParameter();separator=", "><endif>) {
         <method.methodContent>
@@ -66,7 +66,5 @@ outMethod(method)
 
 outMethodParameter(parameter)
 ::= <<
-<parameter.parameterType><if(bean.interfaceNames)>\<<parameter.genericTypes:{name|<name>};separator=", ">\><endif> parameterName
+<parameter.parameterType><if(bean.interfaceNames)>\<<parameter.genericTypes:{name|<name>};separator=", ">\><endif> <parameter.parameterName>
 >>
-
-outParameter

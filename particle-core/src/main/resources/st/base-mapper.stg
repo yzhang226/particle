@@ -1,0 +1,118 @@
+baseMapper(daoBean, entity, criteria, table, options)
+::= <<
+\<?xml version="1.0" encoding="UTF-8"?>
+\<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+\<mapper namespace="<daoBean.packageName>.<daoBean.beanName>">
+
+    <! out ResultMap !>
+    \<resultMap id="BaseResultMap" type="<entity.packageName>.<entity.beanName>">
+        <entity.properties:outPropertyResultMap();separator="\n">
+    \</resultMap>
+
+    \<sql id="BaseColumnList">
+        <entity.properties:{prop|<prop.column.columnName>};separator=", ">
+    \</sql>
+
+    <! out where clause !>
+    \<sql id="BaseWhereClause">
+        \<where>
+            \<trim prefix="(" prefixOverrides="and" suffix=")">
+                <entity.properties:outPropertyWhereClause();separator="\n">
+            \</trim>
+        \</where>
+    \</sql>
+
+    \<sql id="CriteriaWhereClause">
+        \<where>
+            \<trim prefix="(" prefixOverrides="and" suffix=")">
+                <entity.properties:outPropertyCriteriaWhereClause();separator="\n">
+            \</trim>
+        \</where>
+    \</sql>
+
+    \<select id="getById" parameterType="<entity.pkProperty.propertyTypeClass>" resultMap="BaseResultMap">
+        select \<include refid="BaseColumnList" />
+        from <table.tableName>
+        where <table.pkColumn.columnName> = #{<entity.pkProperty.propertyName>,jdbcType=<entity.pkProperty.jdbcTypeName>}
+    \</select>
+
+    \<insert id="save" parameterType="<entity.packageName>.<entity.beanName>"
+            keyColumn="<entity.pkProperty.propertyName>" keyProperty="<entity.pkProperty.column.columnName>" useGeneratedKeys="true">
+        insert into <table.tableName>
+        \<trim prefix="(" suffix=")" suffixOverrides=",">
+            <entity.properties:outPropertyInsertFields();separator="\n">
+        \</trim>
+        \<trim prefix="values (" suffix=")" suffixOverrides=",">
+            <entity.properties:outPropertyInsertValues();separator="\n">
+        \</trim>
+    \</insert>
+
+    \<update id="update" parameterType="<entity.packageName>.<entity.beanName>">
+        update <table.tableName>
+        \<set>
+            <entity.properties:outPropertyUpdateClause();separator="\n">
+        \</set>
+        where <table.pkColumn.columnName> = #{<entity.pkProperty.propertyName>,jdbcType=<entity.pkProperty.jdbcTypeName>}
+    \</update>
+
+    \<select id="query" resultMap="BaseResultMap" parameterType="map" >
+        select \<include refid="BaseColumnList" />
+        from <table.tableName>
+        \<include refid="CriteriaWhereClause" />
+        limit #{offset}, #{limit}
+    \</select>
+
+    \<select id="count" parameterType="<criteria.packageName>.<criteria.beanName>" resultType="java.lang.Long">
+        select count(1) as cnt
+        from <table.tableName>
+        \<include refid="BaseWhereClause" />
+    \</select>
+
+    \<insert id ="batchSave" parameterType="java.util.List" >
+        insert into <table.tableName> (\<include refid="BaseColumnList" />)
+        values
+        \<foreach collection ="list" item="ro" index="index" separator=",">
+        \<trim prefix="(" suffix=")" suffixOverrides=",">
+            <entity.properties:{prop|#{ro.<prop.propertyName>\}};separator=",">
+        \</trim>
+        \</foreach>
+    \</insert>
+
+\</mapper>
+>>
+
+
+outPropertyResultMap(prop)
+::= <<
+<if(prop.column.primaryKey)>
+\<id column="<prop.column.columnName>" jdbcType="<prop.jdbcTypeName>" property="<prop.propertyName>" />
+<else>
+\<result column="<prop.column.columnName>" jdbcType="<prop.jdbcTypeName>" property="<prop.propertyName>" />
+<endif>
+>>
+
+outPropertyWhereClause(prop)
+::= <<
+\<if test="<prop.propertyName> != null">and <prop.column.columnName> = #{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}\</if>
+>>
+
+outPropertyCriteriaWhereClause(prop)
+::= <<
+\<if test="criteria.<prop.propertyName> != null">and <prop.column.columnName> = #{criteria.<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}\</if>
+>>
+
+outPropertyInsertFields(prop)
+::= <<
+\<if test="<prop.propertyName> != null"><prop.column.columnName>\</if>
+>>
+
+outPropertyInsertValues(prop)
+::= <<
+\<if test="<prop.propertyName> != null">#{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}\</if>
+>>
+
+outPropertyUpdateClause(prop)
+::= <<
+<if(!prop.column.primaryKey)>\<if test="<prop.propertyName> != null"><prop.column.columnName> = #{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>},\</if><endif>
+>>
+

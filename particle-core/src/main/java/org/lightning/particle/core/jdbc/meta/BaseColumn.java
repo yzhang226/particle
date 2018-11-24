@@ -1,4 +1,4 @@
-package org.lightning.particle.jdbc.common.meta;
+package org.lightning.particle.core.jdbc.meta;
 
 import lombok.Getter;
 import lombok.Setter;
