@@ -32,7 +32,7 @@ public class JavaFileTest {
         option.enableLocalDateTime = true;
         option.forceOverrideController = true;
 
-        option.removePrefixes = Lists.newArrayList();
+        option.removePrefixes = Lists.newArrayList("app_");
 
         option.rootArtifactId = "dolphin";
         option.basePackageName = "com.fxtech.dolphin";
@@ -41,7 +41,7 @@ public class JavaFileTest {
         DataSourceParam param = DatasourceLoader.buildJdbcParam("local2");
         JdbcJavaFileGenerator generator = new JdbcJavaFileGenerator(param, option, fileGenerator);
 
-        generator.generateJavaFileSuite("test01");
+        generator.generateJavaFileSuite("app_user");
 
     }
 
