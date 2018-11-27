@@ -1,11 +1,8 @@
 package org.lightning.particle.plugin.javabean.meta;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
 import org.lightning.particle.core.model.BeanInfo;
-import org.lightning.particle.core.model.BeanMethod;
 import org.lightning.particle.core.model.BeanProperty;
-import org.lightning.particle.core.model.MethodParameter;
 import org.lightning.particle.core.utils.CamelCaseUtils;
 import org.lightning.particle.core.jdbc.meta.Column;
 import org.lightning.particle.core.jdbc.meta.Table;
@@ -111,19 +108,6 @@ public class TableJavaConverter {
         bean.setPackageName(packageName);
         bean.setComment(table.getRemarks());
 
-        bean.addRequiredClassName("com.fxtech.panda.dao.capacity.CrudDao");
-        bean.setExtendClassName("CrudDao");
-
-        bean.addRequiredClassName(po.getFullBeanName());
-        bean.addRequiredClassName(criteria.getFullBeanName());
-        bean.addRequiredClassName("com.fxtech.panda.dao.common.Dao");
-        bean.setAnnotationNames(Lists.newArrayList("Dao"));
-
-        bean.setExtendClassGenericTypes(Lists.newArrayList(pkClassType().getSimpleName(), poName(), criteriaName()));
-
-        bean.addModifier("public");
-        bean.addModifier("interface");
-
         postProcess(bean);
 
         return bean;
@@ -135,67 +119,6 @@ public class TableJavaConverter {
         bean.setBeanName(serviceName());
         bean.setPackageName(packageName);
         bean.setComment(table.getRemarks());
-
-        String daoPropertyName = StringUtils.uncapitalize(daoName());
-        BeanProperty property = new BeanProperty();
-        property.setComment(getEntityName() + "'s dao");
-        property.setPropertyName(daoPropertyName);
-        property.setPropertyTypeName(daoName());
-        property.setPropertyTypeClass("");
-        property.addAnnotationName("Autowired");
-
-        bean.addProperty(property);
-
-        BeanMethod crudMethod = new BeanMethod();
-        crudMethod.setMethodName("getCrudDao");
-        crudMethod.setModifiers(Lists.newArrayList("public"));
-        crudMethod.setReturnTypeName(dao.getBeanName());
-        crudMethod.setMethodContent("return " + daoPropertyName + ";");
-        bean.addMethod(crudMethod);
-
-        BeanMethod saveMethod = new BeanMethod();
-
-        MethodParameter parameter = new MethodParameter();
-        parameter.setParameterName("request");
-        parameter.setParameterType(request.getBeanName());
-        saveMethod.setParameters(Lists.newArrayList(parameter));
-
-        saveMethod.setMethodName("save");
-        saveMethod.setModifiers(Lists.newArrayList("public"));
-        saveMethod.setReturnTypeName(po.getPkProperty().getPropertyTypeName());
-
-        String content = "{poName} bean = BeanUtils.copy(request, {poName}.class);\n" +
-                "saveBean(bean);\n" +
-                "request.setId(bean.get{pkNameUp}());\n" +
-                "return bean.get{pkNameUp}();";
-        content = content.replaceAll("\\{poName}", poName())
-                .replaceAll("\\{pkNameUp}", StringUtils.capitalize(po.getPkProperty().getPropertyName()))
-                ;
-        saveMethod.setMethodContent(content);
-        String comment = "/**\n" +
-                "* 保存<code>request</code>\n" +
-                "* @param request\n" +
-                "* @return 新增的数据的行主键(如果主键是自增)\n" +
-                "*/";
-        saveMethod.setComment(comment);
-        bean.addMethod(saveMethod);
-
-        bean.addRequiredClassName(po.getFullBeanName());
-        bean.addRequiredClassName(criteria.getFullBeanName());
-        bean.addRequiredClassName(request.getFullBeanName());
-        bean.addRequiredClassName(response.getFullBeanName());
-        bean.addRequiredClassName(dao.getFullBeanName());
-        bean.addRequiredClassName("org.springframework.beans.factory.annotation.Autowired");
-        bean.addRequiredClassName("com.fxtech.panda.dao.capacity.BaseBizService");
-        bean.addRequiredClassName("com.fxtech.panda.core.reflect.BeanUtils");
-
-        bean.setExtendClassName("BaseBizService");
-
-        bean.addRequiredClassName("org.springframework.stereotype.Service");
-        bean.setAnnotationNames(Lists.newArrayList("Service"));
-
-        bean.setExtendClassGenericTypes(Lists.newArrayList(pkClassType().getSimpleName(),
-                poName(), criteriaName(), requestName(), responseName()));
 
         postProcess(bean);
 
@@ -210,6 +133,10 @@ public class TableJavaConverter {
 
         List<BeanProperty> properties = buildBeanProperties(table, bean);
         bean.setProperties(properties);
+
+        bean.getPk().getProperties().forEach(pkProp -> {
+            bean.addRequiredClassName(pkProp.getPropertyTypeClass());
+        });
 
         postProcess(bean);
 
@@ -236,6 +163,7 @@ public class TableJavaConverter {
 
     private List<BeanProperty> buildBeanProperties(Table table, BeanInfo bean) {
         List<BeanProperty> properties = Lists.newArrayList();
+        List<BeanProperty> pkProps = Lists.newArrayList();
         for (Column column : table.getColumns()) {
             BeanProperty property = new BeanProperty();
             property.setComment(column.getRemarks());
@@ -250,8 +178,9 @@ public class TableJavaConverter {
             property.setJdbcTypeName(JavaJdbcTypeMappings.guessJdbcTypeName(column));
             property.setColumn(column);
 
-            if (column.isPrimaryKey() && bean.getPkProperty() == null) {
-                bean.setPkProperty(property);
+            if (column.isPrimaryKey()) {
+//                bean.setPkProperty(property);
+                pkProps.add(property);
             }
 
             properties.add(property);
@@ -260,6 +189,33 @@ public class TableJavaConverter {
                 bean.addRequiredClassName(colType.getName());
             }
         }
+
+        BeanInfo pkBean = new BeanInfo();
+        pkBean.setProperties(pkProps);
+
+        if (pkProps.size() == 1) {
+            BeanProperty prop = pkProps.get(0);
+            String pack = prop.getPropertyTypeClass();
+            pack = pack.substring(0, pack.lastIndexOf("."));
+            pkBean.setBeanName(prop.getPropertyTypeName());
+            pkBean.setPackageName(pack);
+        } else {
+            // generate pk-bean
+            pkBean.setBeanName(bean.getBeanName() + "Pk");
+            pkBean.setPackageName(bean.getPackageName());
+        }
+
+        pkProps.forEach(pkProp -> {
+            pkBean.addRequiredClassName(pkProp.getPropertyTypeClass());
+        });
+
+        pkBean.addRequiredClassName("com.fxtech.panda.core.base.BasePk");
+        pkBean.setExtendClassName("BasePk");
+        pkBean.setEnableGetterSetter(true);
+        pkBean.setEnableLombok(true);
+
+        bean.setPk(pkBean);
+
         return properties;
     }
 
@@ -291,10 +247,10 @@ public class TableJavaConverter {
         return getEntityName() + "Controller";
     }
 
-    private Class<?> pkClassType() {
-        Column pkColumn = table.getPkColumn();
-        return JavaJdbcTypeMappings.guessJavaType(pkColumn, false);
-    }
+//    private Class<?> pkClassType() {
+//        Column pkColumn = table.getPkColumn();
+//        return JavaJdbcTypeMappings.guessJavaType(pkColumn, false);
+//    }
 
 
 

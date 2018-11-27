@@ -5,10 +5,10 @@ emptyMapper(daoBean, entity, criteria, table, options)
 \<mapper namespace="<daoBean.packageName>.<daoBean.beanName>">
 
     \<!-- example -->
-    \<select id="myQuery" parameterType="<entity.pkProperty.propertyTypeClass>" resultMap="BaseResultMap">
+    \<select id="myQuery" parameterType="<entity.pk.fullBeanName>" resultMap="BaseResultMap">
         select \<include refid="BaseColumnList" />
         from <table.tableName>
-        where <table.pkColumn.columnName> = #{<entity.pkProperty.propertyName>,jdbcType=<entity.pkProperty.jdbcTypeName>}
+        where <entity.pk.firstPkProperty.column.columnName> = #{<entity.pk.firstPkProperty.propertyName>,jdbcType=<entity.pk.firstPkProperty.jdbcTypeName>}
     \</select>
 
 

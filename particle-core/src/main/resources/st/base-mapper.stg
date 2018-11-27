@@ -6,7 +6,7 @@ baseMapper(daoBean, entity, criteria, table, options)
 
     <! out ResultMap !>
     \<resultMap id="BaseResultMap" type="<entity.packageName>.<entity.beanName>">
-        <entity.properties:outPropertyResultMap();separator="\n">
+        <entity.properties:outPropertyResultMap();separator="">
     \</resultMap>
 
     \<sql id="BaseColumnList">
@@ -30,14 +30,20 @@ baseMapper(daoBean, entity, criteria, table, options)
         \</where>
     \</sql>
 
-    \<select id="getById" parameterType="<entity.pkProperty.propertyTypeClass>" resultMap="BaseResultMap">
+    \<select id="getById" parameterType="<entity.pk.fullBeanName>" resultMap="BaseResultMap">
         select \<include refid="BaseColumnList" />
         from <table.tableName>
-        where <table.pkColumn.columnName> = #{<entity.pkProperty.propertyName>,jdbcType=<entity.pkProperty.jdbcTypeName>}
+        where
+        (
+        <entity.pk.properties:outPropertyPkPropClause((entity.pk.pkPrefix));separator=" and \n">
+        )
     \</select>
 
     \<insert id="save" parameterType="<entity.packageName>.<entity.beanName>"
-            keyColumn="<entity.pkProperty.propertyName>" keyProperty="<entity.pkProperty.column.columnName>" useGeneratedKeys="true">
+                <if(!entity.pk.multiplePk)>
+                keyColumn="<entity.firstPkProperty.propertyName>" keyProperty="<entity.firstPkProperty.column.columnName>" useGeneratedKeys="true"
+                <endif>
+            >
         insert into <table.tableName>
         \<trim prefix="(" suffix=")" suffixOverrides=",">
             <entity.properties:outPropertyInsertFields();separator="\n">
@@ -52,7 +58,10 @@ baseMapper(daoBean, entity, criteria, table, options)
         \<set>
             <entity.properties:outPropertyUpdateClause();separator="\n">
         \</set>
-        where <table.pkColumn.columnName> = #{<entity.pkProperty.propertyName>,jdbcType=<entity.pkProperty.jdbcTypeName>}
+        where
+        (
+        <entity.pk.properties:outPropertyPkPropClause((entity.pk.pkPrefix));separator=" and \n">
+        )
     \</update>
 
     \<select id="query" resultMap="BaseResultMap" parameterType="map" >
@@ -103,16 +112,21 @@ outPropertyCriteriaWhereClause(prop)
 
 outPropertyInsertFields(prop)
 ::= <<
-\<if test="<prop.propertyName> != null"><prop.column.columnName>\</if>
+\<if test="<prop.propertyName> != null"><prop.column.columnName>,\</if>
 >>
 
 outPropertyInsertValues(prop)
 ::= <<
-\<if test="<prop.propertyName> != null">#{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}\</if>
+\<if test="<prop.propertyName> != null">#{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>},\</if>
 >>
 
 outPropertyUpdateClause(prop)
 ::= <<
 <if(!prop.column.primaryKey)>\<if test="<prop.propertyName> != null"><prop.column.columnName> = #{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>},\</if><endif>
+>>
+
+outPropertyPkPropClause(prop, prefix)
+::= <<
+<prop.column.columnName> = #{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}
 >>
 

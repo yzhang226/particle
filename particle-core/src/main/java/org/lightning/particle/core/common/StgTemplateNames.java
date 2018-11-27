@@ -25,9 +25,19 @@ public interface StgTemplateNames {
         String TEMPLATE_NAME = "javaBean";
     }
 
+    interface SpringDao {
+        String TEMPLATE_PATH = "st/spring-dao.stg";
+        String TEMPLATE_NAME = "springDao";
+    }
+
+    interface SpringService {
+        String TEMPLATE_PATH = "st/spring-service.stg";
+        String TEMPLATE_NAME = "springService";
+    }
+
     interface JavaController {
-        String TEMPLATE_PATH = "st/java-controller.stg";
-        String TEMPLATE_NAME = "javaController";
+        String TEMPLATE_PATH = "st/spring-controller.stg";
+        String TEMPLATE_NAME = "springController";
     }
 
     interface BaseMapper {

@@ -87,9 +87,9 @@ public class JavaFileGenerator {
         return;
     }
 
-    public void generateBaseMapperFile(MavenModule module, BeanInfo daoBean, BeanInfo entity, BeanInfo criteria,
+    public void generateBaseMapperFile(MavenModule module, BeanInfo daoBean, BeanInfo po, BeanInfo criteria,
                                        String databaseName, Table table, boolean isForceOverride) throws IOException {
-        String filePathText = buildBaseMapperXmlPath(module, databaseName, entity);
+        String filePathText = buildBaseMapperXmlPath(module, databaseName, po);
         Path path = Paths.get(filePathText);
 
         if (!isForceOverride && Files.exists(path)) {
@@ -97,7 +97,7 @@ public class JavaFileGenerator {
             return;
         }
 
-        TemplateContext context = createBaseMapperVarContext(daoBean, entity, criteria, table);
+        TemplateContext context = createBaseMapperVarContext(daoBean, po, criteria, table);
         String text = parser.render(context);
 
         if (Files.notExists(path)) {
@@ -135,6 +135,56 @@ public class JavaFileGenerator {
         Files.write(path, text.getBytes());
 
         System.out.println("\tBaseMapper XML file#" + filePathText + " generated");
+    }
+
+    public void generateDaoFile(MavenModule module, BeanInfo po,
+                                BeanInfo criteria, BeanInfo dao, boolean isForceOverride) throws IOException {
+        String filePathText = buildJavaFullPath(module, dao);
+        Path path = Paths.get(filePathText);
+
+        if (!isForceOverride && Files.exists(path)) {
+            System.out.println("\tDAO file#" + filePathText + " already exist");
+            return;
+        }
+
+        TemplateContext context = createJavaDaoVarContext(po, criteria, dao);
+        String text = parser.render(context);
+
+        if (Files.notExists(path)) {
+            if (Files.notExists(path.getParent())) {
+                Files.createDirectories(path.getParent());
+            }
+            Files.createFile(path);
+        }
+
+        Files.write(path, text.getBytes());
+
+        System.out.println("\tDAO file#" + filePathText + " generated");
+    }
+
+    public void generateServiceFile(MavenModule module, BeanInfo po, BeanInfo request, BeanInfo response,
+                                    BeanInfo criteria, BeanInfo dao, BeanInfo service, boolean isForceOverride) throws IOException {
+        String filePathText = buildJavaFullPath(module, service);
+        Path path = Paths.get(filePathText);
+
+        if (!isForceOverride && Files.exists(path)) {
+            System.out.println("\tService file#" + filePathText + " already exist");
+            return;
+        }
+
+        TemplateContext context = createJavaServiceVarContext(po, request, response, criteria, dao, service);
+        String text = parser.render(context);
+
+        if (Files.notExists(path)) {
+            if (Files.notExists(path.getParent())) {
+                Files.createDirectories(path.getParent());
+            }
+            Files.createFile(path);
+        }
+
+        Files.write(path, text.getBytes());
+
+        System.out.println("\tService file#" + filePathText + " generated");
     }
 
     public void generateControllerFile(MavenModule module, BeanInfo controller, BeanInfo po,
@@ -178,12 +228,12 @@ public class JavaFileGenerator {
         return context;
     }
 
-    private TemplateContext createBaseMapperVarContext(BeanInfo daoBean, BeanInfo entity,
+    private TemplateContext createBaseMapperVarContext(BeanInfo daoBean, BeanInfo po,
                                                            BeanInfo criteria, Table table) {
         TemplateContext context = new TemplateContext(StgTemplateNames.BaseMapper.TEMPLATE_PATH,
                 StgTemplateNames.BaseMapper.TEMPLATE_NAME);
         context.addScopedVar("daoBean", daoBean);
-        context.addScopedVar("entity", entity);
+        context.addScopedVar("entity", po);
         context.addScopedVar("criteria", criteria);
         context.addScopedVar("table", table);
         return context;
@@ -197,6 +247,33 @@ public class JavaFileGenerator {
         context.addScopedVar("entity", entity);
         context.addScopedVar("criteria", criteria);
         context.addScopedVar("table", table);
+        return context;
+    }
+
+    private TemplateContext createJavaDaoVarContext(BeanInfo po, BeanInfo criteria, BeanInfo dao) {
+        // springDao(po, criteria, dao, options)
+        TemplateContext context = new TemplateContext(StgTemplateNames.SpringDao.TEMPLATE_PATH,
+                StgTemplateNames.SpringDao.TEMPLATE_NAME);
+        context.addScopedVar("po", po);
+        context.addScopedVar("criteria", criteria);
+        context.addScopedVar("dao", dao);
+        context.addScopedVar("options", options);
+        return context;
+    }
+
+
+    private TemplateContext createJavaServiceVarContext(BeanInfo po, BeanInfo request, BeanInfo response,
+                                                        BeanInfo criteria, BeanInfo dao, BeanInfo service) {
+        // springService(po, request, response, criteria, dao, service, options)
+        TemplateContext context = new TemplateContext(StgTemplateNames.SpringService.TEMPLATE_PATH,
+                StgTemplateNames.SpringService.TEMPLATE_NAME);
+        context.addScopedVar("po", po);
+        context.addScopedVar("request", request);
+        context.addScopedVar("response", response);
+        context.addScopedVar("criteria", criteria);
+        context.addScopedVar("dao", dao);
+        context.addScopedVar("service", service);
+        context.addScopedVar("options", options);
         return context;
     }
 

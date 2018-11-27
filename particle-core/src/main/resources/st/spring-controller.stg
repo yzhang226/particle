@@ -1,12 +1,13 @@
-javaController(controller, po, request, response, service, options)
+springController(po, request, response, service, controller, options)
 ::= <<
 package <controller.packageName>;
 
-import com.fxtech.panda.core.common.DataResult;
-import <po.fullBeanName>;
 import <request.fullBeanName>;
 import <response.fullBeanName>;
 import <service.fullBeanName>;
+import <po.pk.fullBeanName>;
+
+import com.fxtech.panda.core.common.DataResult;
 import com.fxtech.panda.core.utils.DataResults;
 import com.fxtech.panda.spring.core.model.paging.PagingRequest;
 import com.fxtech.panda.spring.core.model.paging.PagingResponse;
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+<controller.requiredClassNames:{clazzName|import <clazzName>;};separator="\n">
+
 
 /**
  * controller of <po.entityName> \<br>
@@ -44,8 +45,15 @@ public class <po.entityName>Controller {
     @ApiOperation(tags = "<po.entityName>", value = "Get<po.entityName>ById", httpMethod = "GET",
                   response = DataResult.class, notes = "通过主键获取<po.entityName>")
     @GetMapping("/get")
-    public DataResult\<<response.beanName>\> getById(@NotNull @Min(1) @RequestParam Integer id) {
-        return DataResults.ok(<service.uncapitalizeBeanName>.getById(id));
+    public DataResult\<<response.beanName>\> getById(<po.pk.properties:{prop|@RequestParam <prop.propertyTypeName> <prop.propertyName>};separator=", ">) {
+        <if(po.pk.multiplePk)>
+        <po.pk.beanName> pk = new <po.pk.beanName>();
+        <po.pk.properties:{prop|pk.set<prop.propertyNameUpperCamelCase>(<prop.propertyName>);};separator="\n">
+        <response.beanName> ret = <service.uncapitalizeBeanName>.getById(pk);
+        <else>
+        <response.beanName> ret = <service.uncapitalizeBeanName>.getBy<po.pk.firstPkProperty.propertyNameUpperCamelCase>(<po.pk.firstPkProperty.propertyName>);
+        <endif>
+        return DataResults.ok(ret);
     }
 
     /**
@@ -57,7 +65,7 @@ public class <po.entityName>Controller {
     @ApiOperation(tags = "<po.entityName>", value = "Add<po.entityName>", httpMethod = "POST",
                   response = DataResult.class, notes = "新增<po.entityName>")
     @PostMapping("/add")
-    public DataResult\<<po.pkProperty.propertyTypeName>\> add(@RequestBody <request.beanName> request) {
+    public DataResult\<<po.pk.beanName>\> add(@RequestBody <request.beanName> request) {
         return DataResults.ok(<service.uncapitalizeBeanName>.save(request));
     }
 
@@ -70,7 +78,7 @@ public class <po.entityName>Controller {
     @ApiOperation(tags = "<po.entityName>", value = "Update<po.entityName>ById", httpMethod = "POST",
                   response = DataResult.class, notes = "更新<po.entityName>")
     @PostMapping("/update")
-    public DataResult\<<po.pkProperty.propertyTypeName>\> update(@RequestBody <request.beanName> request) {
+    public DataResult\<Integer> update(@RequestBody <request.beanName> request) {
         return DataResults.ok(<service.uncapitalizeBeanName>.update(request));
     }
 

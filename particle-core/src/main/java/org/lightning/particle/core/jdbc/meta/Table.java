@@ -1,9 +1,12 @@
 package org.lightning.particle.core.jdbc.meta;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -78,25 +81,23 @@ public class Table {
     /**
      * 主键列
      */
-    private Column pkColumn;
+    @Getter
+    private List<Column> pkColumns = Lists.newArrayList();
 
     /**
      * 构建主键信息
      */
     public void buildColumnOfPrimaryKey() {
-        PrimaryKey pk = primaryKeys.get(0);
+//        PrimaryKey pk = primaryKeys.get(0);
+        Set<String> pkColumnNames = primaryKeys.stream()
+                .map(BaseColumn::getColumnName)
+                .collect(Collectors.toSet());
         for (Column column : columns) {
-            if (column.getColumnName().equals(pk.getColumnName())) {
-                if (pkColumn == null) {
-                    pkColumn = column;
-                    column.setPrimaryKey(true);
-                }
+            if (pkColumnNames.contains(column.getColumnName())) {
+                pkColumns.add(column);
+                column.setPrimaryKey(true);
             }
         }
-    }
-
-    public Column getPkColumn() {
-        return pkColumn;
     }
 
 }

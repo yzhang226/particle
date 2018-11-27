@@ -42,6 +42,11 @@ public class JdbcJavaFileGenerator {
         fileGenerator.generateJavaFile(supportModule, po, option.isForceOverridePo());
         fileGenerator.generateJavaFile(supportModule, criteria, option.isForceOverrideCriteria());
 
+        if (po.getPk().isMultiplePk()) {
+            // generate pk
+            fileGenerator.generateJavaFile(supportModule, po.getPk(), option.isForceOverridePo());
+        }
+
         // dto
         MavenModule dtoModule = new MavenModule(option.getRootArtifactId() + "-model", option.getBasePackageName() + ".model");
         String dtoPackage = dtoModule.getBasePackage() + ".dto." + param.getDatabaseName();
@@ -56,14 +61,16 @@ public class JdbcJavaFileGenerator {
         String daoPackage = daoModule.getBasePackage() + ".daos." + param.getDatabaseName();
         BeanInfo dao = converter.createDaoInfo(daoPackage, po, criteria);
 
-        fileGenerator.generateJavaFile(daoModule, dao, option.isForceOverrideDao());
+        fileGenerator.generateDaoFile(daoModule, po, criteria, dao, option.isForceOverrideDao());
 
         // service
         MavenModule serviceModule = new MavenModule(option.getRootArtifactId() + "-service", option.getBasePackageName() + ".service");
         String servicePackage = serviceModule.getBasePackage() + ".services." + param.getDatabaseName();
         BeanInfo service = converter.createServiceInfo(servicePackage, po, criteria, request, response, dao);
 
-        fileGenerator.generateJavaFile(serviceModule, service, option.isForceOverrideService());
+        fileGenerator.generateServiceFile(serviceModule, po, request, response, criteria, dao, service, option.isForceOverrideService());
+
+
 
         // mapper xml
         fileGenerator.generateBaseMapperFile(daoModule, dao, po, criteria, param.getDatabaseName(),

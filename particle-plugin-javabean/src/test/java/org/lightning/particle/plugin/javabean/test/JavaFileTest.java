@@ -41,6 +41,7 @@ public class JavaFileTest {
         DataSourceParam param = DatasourceLoader.buildJdbcParam("local2");
         JdbcJavaFileGenerator generator = new JdbcJavaFileGenerator(param, option, fileGenerator);
 
+        generator.generateJavaFileSuite("app_privilege");
         generator.generateJavaFileSuite("app_user");
 
     }

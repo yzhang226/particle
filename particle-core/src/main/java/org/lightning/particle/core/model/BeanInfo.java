@@ -87,7 +87,8 @@ public class BeanInfo {
     private boolean enableGetterSetter;
 
     // for jdbc
-    private BeanProperty pkProperty;
+//    private BeanProperty pkProperty;
+    private BeanInfo pk;
 
     private String tableName;
 
@@ -115,6 +116,9 @@ public class BeanInfo {
      * @param className
      */
     public void addRequiredClassName(String className) {
+        if (className.startsWith("java.lang.")) {
+            return;
+        }
         requiredClassNames.add(className);
     }
 
@@ -178,6 +182,22 @@ public class BeanInfo {
             }
         }
         return sb.toString();
+    }
+
+    public boolean isMultiplePk() {
+        return properties != null && properties.size() > 1;
+    }
+
+    public boolean isNotMultiplePk() {
+        return properties != null && properties.size() > 1;
+    }
+
+    public String getPkPrefix() {
+        return isMultiplePk() ? "id." : "";
+    }
+
+    public BeanProperty getFirstPkProperty() {
+        return properties.get(0);
     }
 
 }
