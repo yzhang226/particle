@@ -9,8 +9,8 @@ import <po.pk.fullBeanName>;
 
 import com.fxtech.panda.core.common.DataResult;
 import com.fxtech.panda.core.utils.DataResults;
-import com.fxtech.panda.spring.core.model.paging.PagingRequest;
-import com.fxtech.panda.spring.core.model.paging.PagingResponse;
+import com.fxtech.panda.core.model.paging.PagingRequest;
+import com.fxtech.panda.core.model.paging.PagingResponse;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
