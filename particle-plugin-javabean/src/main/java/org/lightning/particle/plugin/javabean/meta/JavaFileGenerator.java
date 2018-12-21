@@ -87,6 +87,82 @@ public class JavaFileGenerator {
         return;
     }
 
+    public void deleteJavaFile(MavenModule module, BeanInfo info) throws IOException {
+        String filePathText = buildJavaFullPath(module, info);
+
+        Path path = Paths.get(filePathText);
+
+        if (Files.exists(path)) {
+            Files.delete(path);
+            System.out.println("\tDELETE JAVA file#" + filePathText);
+        } else {
+            System.out.println("\tJAVA file#" + filePathText + " DO NOT exist");
+        }
+
+    }
+
+    public void deleteBaseMapperFile(MavenModule module, BeanInfo po, String databaseName) throws IOException {
+        String filePathText = buildBaseMapperXmlPath(module, databaseName, po);
+        Path path = Paths.get(filePathText);
+
+        if (Files.exists(path)) {
+            Files.delete(path);
+            System.out.println("\tDELETE BaseMapper XML file#" + filePathText);
+        } else {
+            System.out.println("\tBaseMapper XML file#" + filePathText + " DO NOT exist");
+        }
+
+    }
+
+    public void deleteEmptyMapperFile(MavenModule module, BeanInfo entity, String databaseName) throws IOException {
+        String filePathText = buildEmptyMapperXmlPath(module, databaseName, entity);
+        Path path = Paths.get(filePathText);
+
+        if (Files.exists(path)) {
+            Files.delete(path);
+            System.out.println("\tDELETE EmptyMapper XML file#" + filePathText);
+        } else {
+            System.out.println("\tEmptyMapper XML file#" + filePathText + " DO NOT exist");
+        }
+
+    }
+
+    public void deleteDaoFile(MavenModule module, BeanInfo dao) throws IOException {
+        String filePathText = buildJavaFullPath(module, dao);
+        Path path = Paths.get(filePathText);
+
+        if (Files.exists(path)) {
+            Files.delete(path);
+            System.out.println("\tDELETE DAO file#" + filePathText);
+        } else {
+            System.out.println("\tDAO file#" + filePathText + " DO NOT exist");
+        }
+    }
+
+    public void deleteServiceFile(MavenModule module, BeanInfo service) throws IOException {
+        String filePathText = buildJavaFullPath(module, service);
+        Path path = Paths.get(filePathText);
+
+        if (Files.exists(path)) {
+            Files.delete(path);
+            System.out.println("\tDELETE Service file#" + filePathText);
+        } else {
+            System.out.println("\tService file#" + filePathText + " DO NOT exist");
+        }
+    }
+
+    public void deleteControllerFile(MavenModule module, BeanInfo controller) throws IOException {
+        String filePathText = buildJavaFullPath(module, controller);
+        Path path = Paths.get(filePathText);
+
+        if (Files.exists(path)) {
+            Files.delete(path);
+            System.out.println("\tDELETE Controller file#" + filePathText);
+        } else {
+            System.out.println("\tController file#" + filePathText + " DO NOT exist");
+        }
+    }
+
     public void generateBaseMapperFile(MavenModule module, BeanInfo daoBean, BeanInfo po, BeanInfo criteria,
                                        String databaseName, Table table, boolean isForceOverride) throws IOException {
         String filePathText = buildBaseMapperXmlPath(module, databaseName, po);
@@ -118,7 +194,7 @@ public class JavaFileGenerator {
         Path path = Paths.get(filePathText);
 
         if (!isForceOverride && Files.exists(path)) {
-            System.out.println("\tBaseMapper XML file#" + filePathText + " already exist");
+            System.out.println("\tEmpty Mapper XML file#" + filePathText + " already exist");
             return;
         }
 
@@ -134,7 +210,7 @@ public class JavaFileGenerator {
 
         Files.write(path, text.getBytes());
 
-        System.out.println("\tBaseMapper XML file#" + filePathText + " generated");
+        System.out.println("\tEmpty Mapper XML file#" + filePathText + " generated");
     }
 
     public void generateDaoFile(MavenModule module, BeanInfo po,

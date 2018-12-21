@@ -37,7 +37,7 @@ outPropertyDefinition(prop, options)
 <endif>
      */
     <prop.annotationNames:{name|@<name>};separator="\n">
-    <prop.modifiers:{name|<name>};separator=" "> <prop.propertyTypeName> <prop.propertyName><if(prop.defaultValue)> = <prop.defaultValue><endif>;
+    <prop.modifiers:{name|<name>};separator=" "> <prop.propertyTypeName> <prop.propertyName>;
 
 >>
 

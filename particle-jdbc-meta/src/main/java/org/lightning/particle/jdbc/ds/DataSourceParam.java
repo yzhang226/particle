@@ -41,4 +41,9 @@ public class DataSourceParam {
      */
     private Long maxWaitMillis;
 
+    private String databaseMappings;
+
+    private String tableNames;
+
+
 }

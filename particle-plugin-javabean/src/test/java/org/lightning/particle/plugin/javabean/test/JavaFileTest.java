@@ -23,14 +23,17 @@ public class JavaFileTest {
 
         option.forceOverrideDtoRequest = true;
         option.forceOverrideDtoResponse = true;
+
         option.forceOverridePo = true;
         option.forceOverrideCriteria = true;
-        option.forceOverrideDao = true;
-        option.forceOverrideService = true;
         option.forceOverrideBaseMapper = true;
+
+
+        option.forceOverrideDao = false;
+        option.forceOverrideService = false;
+        option.forceOverrideController = false;
         option.enableController = true;
         option.enableLocalDateTime = true;
-        option.forceOverrideController = true;
 
         option.removePrefixes = Lists.newArrayList("app_");
 
@@ -41,8 +44,12 @@ public class JavaFileTest {
         DataSourceParam param = DatasourceLoader.buildJdbcParam("local2");
         JdbcJavaFileGenerator generator = new JdbcJavaFileGenerator(param, option, fileGenerator);
 
-        generator.generateJavaFileSuite("app_privilege");
-        generator.generateJavaFileSuite("app_user");
+//        option.databaseMappings
+        option.generateTableNames = Lists.newArrayList("app_user_copy");
+
+//        generator.generateJavaFileSuite("app_privilege");
+        generator.generateJavaFileSuites();
+//        generator.cleanJavaFileSuitesCarefully();
 
     }
 

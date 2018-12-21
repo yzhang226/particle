@@ -78,6 +78,16 @@ public class GenerateOption {
      */
     public String basePackageName;
 
+    /**
+     * 数据库包名映射
+     */
+    public List<String> databaseMappings;
+
+    /**
+     * 等待生成的表名
+     */
+    public List<String> generateTableNames;
+
     public String getCurrentDate() {
         return LocalDate.now().toString();
     }

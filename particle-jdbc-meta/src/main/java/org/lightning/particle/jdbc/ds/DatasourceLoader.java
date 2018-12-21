@@ -20,6 +20,10 @@ public abstract class DatasourceLoader {
         }
         param.setMaxTotal(16);
         param.setMaxWaitMillis(2 * 1000L);
+
+        param.setDatabaseMappings(resource.getString(prefix + ".database.mappings"));
+        param.setTableNames(resource.getString(prefix + ".generate.table-names"));
+
         return param;
     }
 
