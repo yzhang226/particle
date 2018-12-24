@@ -169,6 +169,25 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>fx-releases</id>
+            <url>http://nexus.fxdm.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>fx-snapshots</id>
+            <url>http://nexus.fxdm.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>fx-public</name>
+            <url>http://nexus.fxdm.com/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
     <modules>
         <module>particle-core</module>
         <module>particle-jdbc-meta</module>
