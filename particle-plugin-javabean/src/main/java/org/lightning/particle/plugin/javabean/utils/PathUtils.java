@@ -26,6 +26,7 @@ public abstract class PathUtils {
             String diskChar = propPath.substring(1, idx2);
             if (diskChar.contains(":")) {
                 propPath = propPath.substring(1);
+                System.out.println("trim path at win");
             }
         }
         return propPath;
