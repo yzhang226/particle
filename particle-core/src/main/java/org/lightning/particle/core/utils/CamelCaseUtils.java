@@ -65,6 +65,8 @@ public abstract class CamelCaseUtils {
         //        s = s.toLowerCase();
         s = s.substring(0, 1).toLowerCase() + s.substring(1, s.length());
 
+        s = s.toLowerCase();
+
         StringBuilder sb = new StringBuilder(s.length());
         boolean upperCase = false;
         for (int i = 0; i < s.length(); i++) {
