@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Singular;
 import org.apache.commons.lang3.StringUtils;
+import org.lightning.particle.core.utils.CamelCaseUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -172,7 +173,7 @@ public class BeanInfo {
 
     public String getUriName() {
         StringBuilder sb = new StringBuilder();
-        String uriName = tableName.replace("_", "-");
+        String uriName = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
         char[] arr = uriName.toCharArray();
         for (char c : arr) {
             if (Character.isUpperCase(c)) {

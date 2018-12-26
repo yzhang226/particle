@@ -38,12 +38,12 @@ public class <po.entityName>Service
         <if(po.pk.multiplePk)>// TODO: 多主键 没有自增, 需要手动设置主键 <endif>
         <po.beanName> bean = BeanUtils.copy(request, <po.beanName>.class);
         saveBean(bean);
-        request.setId(bean.getId());
         <if(po.pk.multiplePk)>
         <po.pk.beanName> pk = new <po.pk.beanName>();
         <po.pk.properties:{prop|pk.set<prop.propertyNameUpperCamelCase>(bean.get<prop.propertyNameUpperCamelCase>());};separator="\n">
         return pk;
         <else>
+        request.set<po.pk.firstPkProperty.propertyNameUpperCamelCase>(bean.get<po.pk.firstPkProperty.propertyNameUpperCamelCase>());
         return bean.get<po.pk.firstPkProperty.propertyNameUpperCamelCase>();
         <endif>
     }

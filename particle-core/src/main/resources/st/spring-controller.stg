@@ -51,7 +51,7 @@ public class <po.entityName>Controller {
         <po.pk.properties:{prop|pk.set<prop.propertyNameUpperCamelCase>(<prop.propertyName>);};separator="\n">
         <response.beanName> ret = <service.uncapitalizeBeanName>.getById(pk);
         <else>
-        <response.beanName> ret = <service.uncapitalizeBeanName>.getBy<po.pk.firstPkProperty.propertyNameUpperCamelCase>(<po.pk.firstPkProperty.propertyName>);
+        <response.beanName> ret = <service.uncapitalizeBeanName>.getById(<po.pk.firstPkProperty.propertyName>);
         <endif>
         return DataResults.ok(ret);
     }
