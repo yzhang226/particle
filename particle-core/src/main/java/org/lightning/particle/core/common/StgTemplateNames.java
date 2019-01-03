@@ -35,6 +35,11 @@ public interface StgTemplateNames {
         String TEMPLATE_NAME = "springService";
     }
 
+    interface SpringBiz {
+        String TEMPLATE_PATH = "st/spring-biz.stg";
+        String TEMPLATE_NAME = "springBiz";
+    }
+
     interface JavaController {
         String TEMPLATE_PATH = "st/spring-controller.stg";
         String TEMPLATE_NAME = "springController";

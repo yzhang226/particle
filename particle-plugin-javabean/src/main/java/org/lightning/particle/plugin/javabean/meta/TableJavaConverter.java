@@ -125,6 +125,18 @@ public class TableJavaConverter {
         return bean;
     }
 
+    public BeanInfo createBizInfo(String packageName, BeanInfo po, BeanInfo criteria,
+                                      BeanInfo request, BeanInfo response, BeanInfo dao) {
+        BeanInfo bean = new BeanInfo();
+        bean.setBeanName(bizName());
+        bean.setPackageName(packageName);
+        bean.setComment(table.getRemarks());
+
+        postProcess(bean);
+
+        return bean;
+    }
+
     public BeanInfo createControllerInfo(String packageName) {
         BeanInfo bean = new BeanInfo();
         bean.setBeanName(controllerName());
@@ -241,6 +253,10 @@ public class TableJavaConverter {
 
     private String serviceName() {
         return getEntityName() + "Service";
+    }
+
+    private String bizName() {
+        return getEntityName() + "Biz";
     }
 
     private String controllerName() {

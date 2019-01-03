@@ -151,6 +151,18 @@ public class JavaFileGenerator {
         }
     }
 
+    public void deleteBizFile(MavenModule module, BeanInfo biz) throws IOException {
+        String filePathText = buildJavaFullPath(module, biz);
+        Path path = Paths.get(filePathText);
+
+        if (Files.exists(path)) {
+            Files.delete(path);
+            System.out.println("\tDELETE Biz file#" + filePathText);
+        } else {
+            System.out.println("\tBiz file#" + filePathText + " DO NOT exist");
+        }
+    }
+
     public void deleteControllerFile(MavenModule module, BeanInfo controller) throws IOException {
         String filePathText = buildJavaFullPath(module, controller);
         Path path = Paths.get(filePathText);
@@ -263,9 +275,35 @@ public class JavaFileGenerator {
         System.out.println("\tService file#" + filePathText + " generated");
     }
 
+    public void generateBizFile(MavenModule module, BeanInfo po, BeanInfo request, BeanInfo response,
+                                BeanInfo criteria, BeanInfo dao, BeanInfo service, BeanInfo biz,
+                                boolean isForceOverride) throws IOException {
+        String filePathText = buildJavaFullPath(module, biz);
+        Path path = Paths.get(filePathText);
+
+        if (!isForceOverride && Files.exists(path)) {
+            System.out.println("\tBiz file#" + filePathText + " already exist");
+            return;
+        }
+
+        TemplateContext context = createJavaBizVarContext(po, request, response, criteria, dao, service, biz);
+        String text = parser.render(context);
+
+        if (Files.notExists(path)) {
+            if (Files.notExists(path.getParent())) {
+                Files.createDirectories(path.getParent());
+            }
+            Files.createFile(path);
+        }
+
+        Files.write(path, text.getBytes());
+
+        System.out.println("\tBiz file#" + filePathText + " generated");
+    }
+
     public void generateControllerFile(MavenModule module, BeanInfo controller, BeanInfo po,
                                        BeanInfo request, BeanInfo response,
-                                       BeanInfo service, boolean isForceOverride) throws IOException {
+                                       BeanInfo biz, boolean isForceOverride) throws IOException {
         String filePathText = buildJavaFullPath(module, controller);
         Path path = Paths.get(filePathText);
 
@@ -274,7 +312,7 @@ public class JavaFileGenerator {
             return;
         }
 
-        TemplateContext context = createJavaControllerVarContext(controller, po, request, response, service);
+        TemplateContext context = createJavaControllerVarContext(controller, po, request, response, biz);
         String text = parser.render(context);
 
         if (Files.notExists(path)) {
@@ -353,9 +391,26 @@ public class JavaFileGenerator {
         return context;
     }
 
+    private TemplateContext createJavaBizVarContext(BeanInfo po, BeanInfo request, BeanInfo response,
+                                                    BeanInfo criteria, BeanInfo dao, BeanInfo service,
+                                                    BeanInfo biz) {
+        // springService(po, request, response, criteria, dao, service, options)
+        TemplateContext context = new TemplateContext(StgTemplateNames.SpringBiz.TEMPLATE_PATH,
+                StgTemplateNames.SpringBiz.TEMPLATE_NAME);
+        context.addScopedVar("po", po);
+        context.addScopedVar("request", request);
+        context.addScopedVar("response", response);
+        context.addScopedVar("criteria", criteria);
+        context.addScopedVar("dao", dao);
+        context.addScopedVar("service", service);
+        context.addScopedVar("biz", biz);
+        context.addScopedVar("options", options);
+        return context;
+    }
+
     private TemplateContext createJavaControllerVarContext(BeanInfo controller, BeanInfo po,
                                                                BeanInfo request, BeanInfo response,
-                                                               BeanInfo service) {
+                                                               BeanInfo biz) {
         // javaController(controller, po, request, response, service, options)
         TemplateContext context = new TemplateContext(StgTemplateNames.JavaController.TEMPLATE_PATH,
                 StgTemplateNames.JavaController.TEMPLATE_NAME);
@@ -363,7 +418,7 @@ public class JavaFileGenerator {
         context.addScopedVar("po", po);
         context.addScopedVar("request", request);
         context.addScopedVar("response", response);
-        context.addScopedVar("service", service);
+        context.addScopedVar("biz", biz);
         context.addScopedVar("options", options);
         return context;
     }

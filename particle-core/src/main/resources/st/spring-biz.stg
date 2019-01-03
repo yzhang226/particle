@@ -1,0 +1,85 @@
+springBiz(po, request, response, criteria, dao, service, biz, options)
+::= <<
+package <biz.packageName>;
+
+import <service.fullBeanName>;
+import <po.fullBeanName>;
+import <request.fullBeanName>;
+import <response.fullBeanName>;
+import <criteria.fullBeanName>;
+import <po.pk.fullBeanName>;
+
+import com.fxtech.panda.core.model.paging.PagingRequest;
+import com.fxtech.panda.core.model.paging.PagingResponse;
+import com.fxtech.panda.core.reflect.BeanUtils;
+import com.fxtech.panda.dao.capacity.BaseBiz;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+/**
+ * biz of <po.entityName> \<br>
+ * biz层, \<code>事务\</code>需要放在这一层 \<br>
+ *     此处用了继承，使用默认实现，可根据实际需要覆盖默认实现
+ * Created by <options.username> on <options.currentDate>.
+ */
+@Component
+public class <po.entityName>Biz
+             extends BaseBiz\<<po.pk.beanName>, <po.beanName>, <criteria.beanName>, <request.beanName>, <response.beanName>\> {
+
+    @Autowired
+    private <service.beanName> <service.uncapitalizeBeanName>;
+
+    @Override
+    protected <service.beanName> getService() {
+        return <service.uncapitalizeBeanName>;
+    }
+
+    /**
+    * 保存\<code>request\</code>
+    * @param request
+    * @return 新增的数据的行主键(如果主键是自增)
+    */
+    public <po.pk.beanName> save(<request.beanName> request) {
+        <if(po.pk.multiplePk)>// TODO: 多主键 没有自增, 需要手动设置主键 <endif>
+        <po.beanName> bean = BeanUtils.copy(request, <po.beanName>.class);
+        getService().saveBean(bean);
+        <if(po.pk.multiplePk)>
+        <po.pk.beanName> pk = new <po.pk.beanName>();
+        <po.pk.properties:{prop|pk.set<prop.propertyNameUpperCamelCase>(bean.get<prop.propertyNameUpperCamelCase>());};separator="\n">
+        return pk;
+        <else>
+        request.set<po.pk.firstPkProperty.propertyNameUpperCamelCase>(bean.get<po.pk.firstPkProperty.propertyNameUpperCamelCase>());
+        return bean.get<po.pk.firstPkProperty.propertyNameUpperCamelCase>();
+        <endif>
+    }
+
+
+    @Override
+    public <response.beanName> getById(<po.pk.beanName> id) {
+        return super.getById(id);
+    }
+
+    @Override
+    public int update(<request.beanName> request) {
+        return super.update(request);
+    }
+
+    @Override
+    public List\<<response.beanName>\> findByCriteria(<request.beanName> criteria) {
+        // TODO: 实现自定义业务逻辑
+        return super.findByCriteria(criteria);
+    }
+
+    @Override
+    public PagingResponse\<<response.beanName>\> findPaging(PagingRequest\<<request.beanName>\> paging) {
+        // TODO: 实现自定义业务逻辑
+        return super.findPaging(paging);
+    }
+
+}
+
+>>
+
+

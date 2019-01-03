@@ -44,6 +44,11 @@ public class GenerateOption {
     public boolean forceOverrideService = false;
 
     /**
+     * 是否强制覆盖Biz文件, 默认: false
+     */
+    public boolean forceOverrideBiz = false;
+
+    /**
      * 是否强制覆盖BaseMapper文件, 默认: true
      */
     public boolean forceOverrideBaseMapper = true;

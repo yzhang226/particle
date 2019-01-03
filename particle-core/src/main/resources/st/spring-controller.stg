@@ -1,10 +1,10 @@
-springController(po, request, response, service, controller, options)
+springController(po, request, response, biz, controller, options)
 ::= <<
 package <controller.packageName>;
 
 import <request.fullBeanName>;
 import <response.fullBeanName>;
-import <service.fullBeanName>;
+import <biz.fullBeanName>;
 import <po.pk.fullBeanName>;
 
 import com.fxtech.panda.core.common.DataResult;
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class <po.entityName>Controller {
 
     @Autowired
-    private <service.beanName> <service.uncapitalizeBeanName>;
+    private <biz.beanName> <biz.uncapitalizeBeanName>;
 
     /**
      * 可以设置基础约束
@@ -49,9 +49,9 @@ public class <po.entityName>Controller {
         <if(po.pk.multiplePk)>
         <po.pk.beanName> pk = new <po.pk.beanName>();
         <po.pk.properties:{prop|pk.set<prop.propertyNameUpperCamelCase>(<prop.propertyName>);};separator="\n">
-        <response.beanName> ret = <service.uncapitalizeBeanName>.getById(pk);
+        <response.beanName> ret = <biz.uncapitalizeBeanName>.getById(pk);
         <else>
-        <response.beanName> ret = <service.uncapitalizeBeanName>.getById(<po.pk.firstPkProperty.propertyName>);
+        <response.beanName> ret = <biz.uncapitalizeBeanName>.getById(<po.pk.firstPkProperty.propertyName>);
         <endif>
         return DataResults.ok(ret);
     }
@@ -66,7 +66,7 @@ public class <po.entityName>Controller {
                   response = DataResult.class, notes = "新增<po.entityName>")
     @PostMapping("/add")
     public DataResult\<<po.pk.beanName>\> add(@RequestBody <request.beanName> request) {
-        return DataResults.ok(<service.uncapitalizeBeanName>.save(request));
+        return DataResults.ok(<biz.uncapitalizeBeanName>.save(request));
     }
 
     /**
@@ -79,7 +79,7 @@ public class <po.entityName>Controller {
                   response = DataResult.class, notes = "更新<po.entityName>")
     @PostMapping("/update")
     public DataResult\<Integer> update(@RequestBody <request.beanName> request) {
-        return DataResults.ok(<service.uncapitalizeBeanName>.update(request));
+        return DataResults.ok(<biz.uncapitalizeBeanName>.update(request));
     }
 
     /**
@@ -92,7 +92,7 @@ public class <po.entityName>Controller {
                   response = DataResult.class, notes = "分页查询<po.entityName>")
     @PostMapping("/find-page")
     public DataResult\<PagingResponse\<<response.beanName>\>> findPaging(@RequestBody PagingRequest\<<request.beanName>\> request) {
-        return DataResults.ok(<service.uncapitalizeBeanName>.findPaging(request));
+        return DataResults.ok(<biz.uncapitalizeBeanName>.findPaging(request));
     }
 
 

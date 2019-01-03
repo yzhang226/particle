@@ -9,8 +9,7 @@ import <response.fullBeanName>;
 import <criteria.fullBeanName>;
 import <po.pk.fullBeanName>;
 
-import com.fxtech.panda.core.reflect.BeanUtils;
-import com.fxtech.panda.dao.capacity.BaseBizService;
+import com.fxtech.panda.dao.capacity.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,32 +19,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class <po.entityName>Service
-             extends BaseBizService\<<po.pk.beanName>, <po.beanName>, <criteria.beanName>, <request.beanName>, <response.beanName>\> {
+             extends BaseService\<<po.pk.beanName>, <po.beanName>, <criteria.beanName>\> {
 
     @Autowired
     private <dao.beanName> <dao.uncapitalizeBeanName>;
 
+    @Override
     protected <dao.beanName> getCrudDao() {
         return <dao.uncapitalizeBeanName>;
-    }
-
-    /**
-    * 保存\<code>request\</code>
-    * @param request
-    * @return 新增的数据的行主键(如果主键是自增)
-    */
-    public <po.pk.beanName> save(<request.beanName> request) {
-        <if(po.pk.multiplePk)>// TODO: 多主键 没有自增, 需要手动设置主键 <endif>
-        <po.beanName> bean = BeanUtils.copy(request, <po.beanName>.class);
-        saveBean(bean);
-        <if(po.pk.multiplePk)>
-        <po.pk.beanName> pk = new <po.pk.beanName>();
-        <po.pk.properties:{prop|pk.set<prop.propertyNameUpperCamelCase>(bean.get<prop.propertyNameUpperCamelCase>());};separator="\n">
-        return pk;
-        <else>
-        request.set<po.pk.firstPkProperty.propertyNameUpperCamelCase>(bean.get<po.pk.firstPkProperty.propertyNameUpperCamelCase>());
-        return bean.get<po.pk.firstPkProperty.propertyNameUpperCamelCase>();
-        <endif>
     }
 
 }

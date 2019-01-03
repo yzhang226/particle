@@ -119,6 +119,13 @@ public class JdbcJavaFileGenerator {
 
         fileGenerator.deleteServiceFile(serviceModule, service);
 
+        // biz
+        MavenModule bizModule = new MavenModule(option.getRootArtifactId() + "-service", option.getBasePackageName() + ".service");
+        String bizPackage = serviceModule.getBasePackage() + ".bizs." + dbPackName;
+        BeanInfo biz = converter.createBizInfo(bizPackage, po, criteria, request, response, dao);
+
+        fileGenerator.deleteBizFile(bizModule, biz);
+
         // mapper xml
         fileGenerator.deleteBaseMapperFile(daoModule, po, dbPackName);
 
@@ -178,6 +185,13 @@ public class JdbcJavaFileGenerator {
 
         fileGenerator.generateServiceFile(serviceModule, po, request, response, criteria, dao, service, option.isForceOverrideService());
 
+        // biz
+        MavenModule bizModule = new MavenModule(option.getRootArtifactId() + "-service", option.getBasePackageName() + ".service");
+        String bizPackage = bizModule.getBasePackage() + ".bizs." + dbPackName;
+        BeanInfo biz = converter.createBizInfo(bizPackage, po, criteria, request, response, dao);
+
+        fileGenerator.generateBizFile(serviceModule, po, request, response, criteria, dao, service, biz, option.isForceOverrideBiz());
+
         // mapper xml
         fileGenerator.generateBaseMapperFile(daoModule, dao, po, criteria, dbPackName,
                 table, option.isForceOverrideBaseMapper());
@@ -190,7 +204,7 @@ public class JdbcJavaFileGenerator {
         BeanInfo controller = converter.createControllerInfo(controllerPackage);
 
         if (option.isEnableController()) {
-            fileGenerator.generateControllerFile(controllerModule, controller, po, request, response, service, option.isForceOverrideController());
+            fileGenerator.generateControllerFile(controllerModule, controller, po, request, response, biz, option.isForceOverrideController());
         }
 
     }
