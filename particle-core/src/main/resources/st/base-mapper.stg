@@ -41,7 +41,7 @@ baseMapper(daoBean, entity, criteria, table, options)
 
     \<insert id="save" parameterType="<entity.packageName>.<entity.beanName>"
                 <if(!entity.pk.multiplePk)>
-                keyColumn="<entity.firstPkProperty.propertyName>" keyProperty="<entity.firstPkProperty.column.columnName>" useGeneratedKeys="true"
+                keyColumn="<entity.firstPkProperty.column.columnName>" keyProperty="<entity.firstPkProperty.propertyName>" useGeneratedKeys="true"
                 <endif>
             >
         insert into <table.tableName>

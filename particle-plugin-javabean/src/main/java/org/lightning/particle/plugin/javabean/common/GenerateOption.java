@@ -54,6 +54,11 @@ public class GenerateOption {
     public boolean forceOverrideBaseMapper = true;
 
     /**
+     * 是否强制覆盖Mapper文件, 默认: false
+     */
+    public boolean forceOverrideMapper = false;
+
+    /**
      * 是否生成Controller文件, 默认: false
      */
     public boolean enableController = false;

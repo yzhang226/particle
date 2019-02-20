@@ -197,7 +197,7 @@ public class JdbcJavaFileGenerator {
                 table, option.isForceOverrideBaseMapper());
 
         fileGenerator.generateEmptyMapperFile(daoModule, dao, po, criteria, dbPackName,
-                table, option.isForceOverrideBaseMapper());
+                table, option.isForceOverrideMapper());
 
         MavenModule controllerModule = new MavenModule(option.getRootArtifactId() + "-api", option.getBasePackageName() + ".api");
         String controllerPackage = controllerModule.getBasePackage() + ".controller." + dbPackName;

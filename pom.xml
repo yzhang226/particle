@@ -7,11 +7,14 @@
     <groupId>org.lightning.particle</groupId>
     <artifactId>particle</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+
+        <!-- particle -->
+        <particle.version>1.0.2-SNAPSHOT</particle.version><!-- 升级版本, 记得更新此版本号 -->
 
         <slf4j.version>1.7.25</slf4j.version>
         <common.collections>4.1</common.collections>
@@ -27,8 +30,6 @@
         <junit.version>5.2.0</junit.version>
         <antlr.st>4.0.8</antlr.st>
 
-        <!-- particle -->
-        <particle.version>1.0-SNAPSHOT</particle.version>
     </properties>
 
     <dependencyManagement>
