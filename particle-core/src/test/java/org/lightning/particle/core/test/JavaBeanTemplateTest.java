@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.junit.jupiter.api.Test;
 import org.lightning.particle.core.common.GenerateOptions;
 import org.lightning.particle.core.common.StgTemplateNames;
+import org.lightning.particle.core.common.TemplateNameEnum;
 import org.lightning.particle.core.model.BeanInfo;
 import org.lightning.particle.core.model.BeanMethod;
 import org.lightning.particle.core.model.BeanProperty;
@@ -104,8 +105,8 @@ public class JavaBeanTemplateTest {
             info.addClassAnnotationName(Setter.class);
         }
 
-        TemplateContext context = new TemplateContext(StgTemplateNames.JavaBean.TEMPLATE_PATH,
-                StgTemplateNames.JavaBean.TEMPLATE_NAME);
+        TemplateContext context = new TemplateContext(TemplateNameEnum.JavaBean.getTemplatePath(),
+                TemplateNameEnum.JavaBean.getTemplateName());
         context.addScopedVar("bean", info);
         context.addScopedVar("options", options);
 

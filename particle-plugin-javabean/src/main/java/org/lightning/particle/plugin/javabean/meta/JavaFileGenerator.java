@@ -1,11 +1,9 @@
 package org.lightning.particle.plugin.javabean.meta;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
-import org.lightning.particle.core.common.StgTemplateNames;
 import org.lightning.particle.core.common.GenerateOptions;
+import org.lightning.particle.core.common.TemplateNameEnum;
 import org.lightning.particle.core.jdbc.meta.Table;
 import org.lightning.particle.core.model.BeanInfo;
 import org.lightning.particle.core.template.STTemplateParser;
@@ -15,9 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
-
-import static org.lightning.particle.core.common.StgTemplateNames.KEY_TEMPLATE_NAME;
 
 /**
  * Created by cook on 2018/11/24
@@ -335,8 +330,9 @@ public class JavaFileGenerator {
     }
 
     private TemplateContext createJavaBeanVarContext(BeanInfo info) {
-        TemplateContext context = new TemplateContext(StgTemplateNames.JavaBean.TEMPLATE_PATH,
-                StgTemplateNames.JavaBean.TEMPLATE_NAME);
+
+        TemplateContext context = new TemplateContext(TemplateNameEnum.JavaBean.getTemplatePath(),
+                TemplateNameEnum.JavaBean.getTemplateName());
         context.addScopedVar("bean", info);
         context.addScopedVar("options", options);
         return context;
@@ -344,8 +340,8 @@ public class JavaFileGenerator {
 
     private TemplateContext createBaseMapperVarContext(BeanInfo daoBean, BeanInfo po,
                                                            BeanInfo criteria, Table table) {
-        TemplateContext context = new TemplateContext(StgTemplateNames.BaseMapper.TEMPLATE_PATH,
-                StgTemplateNames.BaseMapper.TEMPLATE_NAME);
+        TemplateContext context = new TemplateContext(TemplateNameEnum.BaseMapper.getTemplatePath(),
+                TemplateNameEnum.BaseMapper.getTemplateName());
         context.addScopedVar("daoBean", daoBean);
         context.addScopedVar("entity", po);
         context.addScopedVar("criteria", criteria);
@@ -355,8 +351,8 @@ public class JavaFileGenerator {
 
     private TemplateContext createEmptyMapperVarContext(BeanInfo daoBean, BeanInfo entity,
                                                        BeanInfo criteria, Table table) {
-        TemplateContext context = new TemplateContext(StgTemplateNames.EmptyMapper.TEMPLATE_PATH,
-                StgTemplateNames.EmptyMapper.TEMPLATE_NAME);
+        TemplateContext context = new TemplateContext(TemplateNameEnum.EmptyMapper.getTemplatePath(),
+                TemplateNameEnum.EmptyMapper.getTemplateName());
         context.addScopedVar("daoBean", daoBean);
         context.addScopedVar("entity", entity);
         context.addScopedVar("criteria", criteria);
@@ -366,8 +362,8 @@ public class JavaFileGenerator {
 
     private TemplateContext createJavaDaoVarContext(BeanInfo po, BeanInfo criteria, BeanInfo dao) {
         // springDao(po, criteria, dao, options)
-        TemplateContext context = new TemplateContext(StgTemplateNames.SpringDao.TEMPLATE_PATH,
-                StgTemplateNames.SpringDao.TEMPLATE_NAME);
+        TemplateContext context = new TemplateContext(TemplateNameEnum.SpringDao.getTemplatePath(),
+                TemplateNameEnum.SpringDao.getTemplateName());
         context.addScopedVar("po", po);
         context.addScopedVar("criteria", criteria);
         context.addScopedVar("dao", dao);
@@ -379,8 +375,8 @@ public class JavaFileGenerator {
     private TemplateContext createJavaServiceVarContext(BeanInfo po, BeanInfo request, BeanInfo response,
                                                         BeanInfo criteria, BeanInfo dao, BeanInfo service) {
         // springService(po, request, response, criteria, dao, service, options)
-        TemplateContext context = new TemplateContext(StgTemplateNames.SpringService.TEMPLATE_PATH,
-                StgTemplateNames.SpringService.TEMPLATE_NAME);
+        TemplateContext context = new TemplateContext(TemplateNameEnum.SpringService.getTemplatePath(),
+                TemplateNameEnum.SpringService.getTemplateName());
         context.addScopedVar("po", po);
         context.addScopedVar("request", request);
         context.addScopedVar("response", response);
@@ -395,8 +391,8 @@ public class JavaFileGenerator {
                                                     BeanInfo criteria, BeanInfo dao, BeanInfo service,
                                                     BeanInfo biz) {
         // springService(po, request, response, criteria, dao, service, options)
-        TemplateContext context = new TemplateContext(StgTemplateNames.SpringBiz.TEMPLATE_PATH,
-                StgTemplateNames.SpringBiz.TEMPLATE_NAME);
+        TemplateContext context = new TemplateContext(TemplateNameEnum.SpringBiz.getTemplatePath(),
+                TemplateNameEnum.SpringBiz.getTemplateName());
         context.addScopedVar("po", po);
         context.addScopedVar("request", request);
         context.addScopedVar("response", response);
@@ -412,8 +408,8 @@ public class JavaFileGenerator {
                                                                BeanInfo request, BeanInfo response,
                                                                BeanInfo biz) {
         // javaController(controller, po, request, response, service, options)
-        TemplateContext context = new TemplateContext(StgTemplateNames.JavaController.TEMPLATE_PATH,
-                StgTemplateNames.JavaController.TEMPLATE_NAME);
+        TemplateContext context = new TemplateContext(TemplateNameEnum.JavaController.getTemplatePath(),
+                TemplateNameEnum.JavaController.getTemplateName());
         context.addScopedVar("controller", controller);
         context.addScopedVar("po", po);
         context.addScopedVar("request", request);
