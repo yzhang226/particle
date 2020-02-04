@@ -15,6 +15,8 @@ import com.fxtech.panda.core.reflect.BeanUtils;
 import com.fxtech.panda.dao.capacity.BaseBiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ import java.util.List;
 @Component
 public class <po.entityName>Biz
              extends BaseBiz\<<po.pk.beanName>, <po.beanName>, <criteria.beanName>, <request.beanName>, <response.beanName>\> {
+
+    private static final Logger logger = LoggerFactory.getLogger(<po.entityName>Biz.class);
 
     @Autowired
     private <service.beanName> <service.uncapitalizeBeanName>;

@@ -21,9 +21,9 @@ public class DeMixMain {
         System.out.println("len=" + x.length() + ", " + x.toCharArray().length);
         System.out.println("- [" + (char) Integer.parseInt("1F", 16) + "] ");
 
-        String dir = "/work/bid/20190824/scripts/scripts";
+        String dir = "/work/bid/202001/scripts";
 
-        String targetDir = "/work/bid/20190824/flash-src-generate";
+        String targetDir = "/work/bid/202001/flash-src-generate";
 
         List<Path> paths = Files.find(Paths.get(dir), 5, (o, o2) -> o2.isRegularFile())
                 .collect(Collectors.toList());

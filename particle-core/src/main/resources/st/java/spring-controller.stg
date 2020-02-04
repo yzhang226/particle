@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 <controller.requiredClassNames:{clazzName|import <clazzName>;};separator="\n">
 
@@ -32,6 +34,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequestMapping(value="/v1/<po.uriName>")
 @Api(tags = "<po.entityName>")
 public class <po.entityName>Controller {
+
+    private static final Logger logger = LoggerFactory.getLogger(<po.entityName>Controller.class);
 
     @Autowired
     private <biz.beanName> <biz.uncapitalizeBeanName>;

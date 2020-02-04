@@ -40,12 +40,12 @@ public class JavaFileTest {
         option.rootArtifactId = "dolphin";
         option.basePackageName = "com.fxtech.dolphin";
 
-        JavaFileGenerator fileGenerator = new JavaFileGenerator("/work/fxtech/dolphin");
-        DataSourceParam param = DatasourceLoader.buildJdbcParam("local2");
+        JavaFileGenerator fileGenerator = new JavaFileGenerator("/storage/tmp");
+        DataSourceParam param = DatasourceLoader.buildJdbcParam("local_dev");
         JdbcJavaFileGenerator generator = new JdbcJavaFileGenerator(param, option, fileGenerator);
 
 //        option.databaseMappings
-        option.generateTableNames = Lists.newArrayList("app_user_copy");
+//        option.generateTableNames = Lists.newArrayList("app_user_copy");
 
 //        generator.generateJavaFileSuite("app_privilege");
         generator.generateJavaFileSuites();
