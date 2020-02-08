@@ -6,7 +6,8 @@ baseMapper(daoBean, entity, criteria, table, options)
 
     <! out ResultMap !>
     \<resultMap id="BaseResultMap" type="<entity.packageName>.<entity.beanName>">
-        <entity.properties:outPropertyResultMap();separator="">
+        <entity.properties:outPkProperty4ResultMap();separator="">
+        <entity.properties:outProperty4ResultMap();separator="">
     \</resultMap>
 
     \<sql id="BaseColumnList">
@@ -91,11 +92,16 @@ baseMapper(daoBean, entity, criteria, table, options)
 >>
 
 
-outPropertyResultMap(prop)
+outPkProperty4ResultMap(prop)
 ::= <<
 <if(prop.column.primaryKey)>
 \<id column="<prop.column.columnName>" jdbcType="<prop.jdbcTypeName>" property="<prop.propertyName>" />
-<else>
+<endif>
+>>
+
+outProperty4ResultMap(prop)
+::= <<
+<if(!prop.column.primaryKey)>
 \<result column="<prop.column.columnName>" jdbcType="<prop.jdbcTypeName>" property="<prop.propertyName>" />
 <endif>
 >>
