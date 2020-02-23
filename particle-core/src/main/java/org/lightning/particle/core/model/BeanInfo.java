@@ -95,6 +95,8 @@ public class BeanInfo {
 
     private String entityName;
 
+    private boolean enableSwagger;
+
     /**
      * beanName-首字母小写
      * @return
@@ -110,6 +112,11 @@ public class BeanInfo {
     public void addClassAnnotationName(Class<?> annoClass) {
         annotationNames.add(annoClass.getSimpleName());
         requiredClassNames.add(annoClass.getName());
+    }
+
+    public void addClassAnnotationName(String fullClassName, String annoInner) {
+        annotationNames.add(fullClassName.substring(fullClassName.lastIndexOf('.') + 1) + annoInner);
+        requiredClassNames.add(fullClassName);
     }
 
     /**

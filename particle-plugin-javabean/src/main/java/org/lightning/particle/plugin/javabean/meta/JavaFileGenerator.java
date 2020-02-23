@@ -6,6 +6,7 @@ import org.lightning.particle.core.common.GenerateOptions;
 import org.lightning.particle.core.common.TemplateNameEnum;
 import org.lightning.particle.core.jdbc.meta.Table;
 import org.lightning.particle.core.model.BeanInfo;
+import org.lightning.particle.core.model.BeanProperty;
 import org.lightning.particle.core.template.STTemplateParser;
 import org.lightning.particle.core.template.TemplateContext;
 
@@ -326,6 +327,17 @@ public class JavaFileGenerator {
         if (info.isEnableGetterSetter() && info.isEnableLombok()) {
             info.addClassAnnotationName(Getter.class);
             info.addClassAnnotationName(Setter.class);
+        }
+        if (info.isEnableSwagger()) {
+//            @ApiModel(description = "")
+            info.addClassAnnotationName("io.swagger.annotations.ApiModel", "(description = \"" + info.getComment() + "\")" );
+
+            // @ApiModelProperty("过期的秒数")
+            info.addRequiredClassName("io.swagger.annotations.ApiModelProperty");
+            for (BeanProperty prop : info.getProperties()) {
+                prop.addAnnotationName("ApiModelProperty(\"" + prop.getComment() + "\")");
+            }
+
         }
     }
 

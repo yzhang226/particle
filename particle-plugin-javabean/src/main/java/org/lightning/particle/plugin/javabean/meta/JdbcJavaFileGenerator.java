@@ -166,7 +166,9 @@ public class JdbcJavaFileGenerator {
         MavenModule dtoModule = new MavenModule(option.getRootArtifactId() + "-model", option.getBasePackageName() + ".model");
         String dtoPackage = dtoModule.getBasePackage() + ".dto." + dbPackName;
         BeanInfo request = converter.createRequestInfo(dtoPackage);
+        request.setEnableSwagger(true);
         BeanInfo response = converter.createResponseInfo(dtoPackage);
+        response.setEnableSwagger(true);
 
         fileGenerator.generateJavaFile(dtoModule, request, option.isForceOverrideDtoRequest());
         fileGenerator.generateJavaFile(dtoModule, response, option.isForceOverrideDtoResponse());
