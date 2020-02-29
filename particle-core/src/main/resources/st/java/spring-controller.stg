@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 <controller.requiredClassNames:{clazzName|import <clazzName>;};separator="\n">
 
@@ -33,6 +35,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Api(tags = "<po.entityName>")
 public class <po.entityName>Controller {
 
+    private static final Logger logger = LoggerFactory.getLogger(<po.entityName>Controller.class);
+
     @Autowired
     private <biz.beanName> <biz.uncapitalizeBeanName>;
 
@@ -43,7 +47,7 @@ public class <po.entityName>Controller {
      * @return
      */
     @ApiOperation(tags = "<po.entityName>", value = "Get<po.entityName>ById", httpMethod = "GET",
-                  response = DataResult.class, notes = "通过主键获取<po.entityName>")
+                   notes = "通过主键获取<po.entityName>")
     @GetMapping("/get")
     public DataResult\<<response.beanName>\> getById(<po.pk.properties:{prop|@RequestParam <prop.propertyTypeName> <prop.propertyName>};separator=", ">) {
         <if(po.pk.multiplePk)>
@@ -63,7 +67,7 @@ public class <po.entityName>Controller {
      * @return 新增的数据的行主键(如果自增主键)
      */
     @ApiOperation(tags = "<po.entityName>", value = "Add<po.entityName>", httpMethod = "POST",
-                  response = DataResult.class, notes = "新增<po.entityName>")
+                   notes = "新增<po.entityName>")
     @PostMapping("/add")
     public DataResult\<<po.pk.beanName>\> add(@RequestBody <request.beanName> request) {
         return DataResults.ok(<biz.uncapitalizeBeanName>.save(request));
@@ -76,7 +80,7 @@ public class <po.entityName>Controller {
      * @return 影响数据表的行数
      */
     @ApiOperation(tags = "<po.entityName>", value = "Update<po.entityName>ById", httpMethod = "POST",
-                  response = DataResult.class, notes = "更新<po.entityName>")
+                   notes = "更新<po.entityName>")
     @PostMapping("/update")
     public DataResult\<Integer> update(@RequestBody <request.beanName> request) {
         return DataResults.ok(<biz.uncapitalizeBeanName>.update(request));
@@ -89,7 +93,7 @@ public class <po.entityName>Controller {
      * @return 分页结果集
      */
     @ApiOperation(tags = "<po.entityName>", value = "Find<po.entityName>Paging", httpMethod = "POST",
-                  response = DataResult.class, notes = "分页查询<po.entityName>")
+                   notes = "分页查询<po.entityName>")
     @PostMapping("/find-page")
     public DataResult\<PagingResponse\<<response.beanName>\>> findPaging(@RequestBody PagingRequest\<<request.beanName>\> request) {
         return DataResults.ok(<biz.uncapitalizeBeanName>.findPaging(request));
