@@ -93,11 +93,11 @@ baseMapper(daoBean, entity, criteria, table, options)
 
 
 outPkProperty4ResultMap(prop)
-::= <%
+::= <<
 <if(prop.column.primaryKey)>
 \<id column="<prop.column.columnName>" jdbcType="<prop.jdbcTypeName>" property="<prop.propertyName>" />
 <endif>
-%>
+>>
 
 outProperty4ResultMap(prop)
 ::= <<
