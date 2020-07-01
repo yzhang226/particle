@@ -24,7 +24,7 @@
         <commons.dbcp2>2.4.0</commons.dbcp2>
         <guava.version>25.1-jre</guava.version>
         <lombok.version>1.18.0</lombok.version>
-        <mysql.jdbc.version>5.1.46</mysql.jdbc.version>
+        <mysql.jdbc.version>8.0.16</mysql.jdbc.version>
         <sqljdbc4.version>4.0</sqljdbc4.version>
         <mssql.jdbc.version>6.4.0.jre8</mssql.jdbc.version>
         <junit.version>5.2.0</junit.version>
