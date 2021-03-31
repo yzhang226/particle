@@ -22,7 +22,7 @@
         <commons.beanutils>1.9.3</commons.beanutils>
         <commons.io>2.6</commons.io>
         <commons.dbcp2>2.4.0</commons.dbcp2>
-        <guava.version>25.1-jre</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <lombok.version>1.18.0</lombok.version>
         <mysql.jdbc.version>5.1.46</mysql.jdbc.version>
         <sqljdbc4.version>4.0</sqljdbc4.version>
