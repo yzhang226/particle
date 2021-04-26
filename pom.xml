@@ -20,7 +20,7 @@
         <common.collections>4.1</common.collections>
         <commons.lang3>3.7</commons.lang3>
         <commons.beanutils>1.9.3</commons.beanutils>
-        <commons.io>2.6</commons.io>
+        <commons.io>2.7</commons.io>
         <commons.dbcp2>2.4.0</commons.dbcp2>
         <guava.version>25.1-jre</guava.version>
         <lombok.version>1.18.0</lombok.version>
