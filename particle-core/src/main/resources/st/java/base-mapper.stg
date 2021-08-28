@@ -88,6 +88,19 @@ baseMapper(daoBean, entity, criteria, table, options)
         \</foreach>
     \</insert>
 
+    \<update id="batchUpdate" parameterType="java.util.List">
+        \<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update <table.tableName>
+            \<set>
+                <entity.properties:outPropertyUpdateClauseWithItem();separator="\n">
+            \</set>
+            where
+            (
+            <entity.pk.properties:outPropertyPkPropClauseWithItem((entity.pk.pkPrefix));separator=" and \n">
+            )
+        \</foreach>
+    \</update>
+
 \</mapper>
 >>
 
@@ -136,3 +149,12 @@ outPropertyPkPropClause(prop, prefix)
 <prop.column.columnName> = #{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}
 >>
 
+outPropertyUpdateClauseWithItem(prop)
+::= <<
+<if(!prop.column.primaryKey)>\<if test="item.<prop.propertyName> != null"><prop.column.columnName> = #{item.<prop.propertyName>,jdbcType=<prop.jdbcTypeName>},\</if><endif>
+>>
+
+outPropertyPkPropClauseWithItem(prop, prefix)
+::= <<
+<prop.column.columnName> = #{item.<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}
+>>
