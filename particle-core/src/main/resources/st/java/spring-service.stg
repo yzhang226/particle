@@ -9,7 +9,7 @@ import <response.fullBeanName>;
 import <criteria.fullBeanName>;
 import <po.pk.fullBeanName>;
 
-import com.fxtech.panda.dao.capacity.BaseService;
+import com.djtech.robin.dao.capacity.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;

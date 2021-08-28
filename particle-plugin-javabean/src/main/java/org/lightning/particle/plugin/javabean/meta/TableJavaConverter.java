@@ -34,7 +34,7 @@ public class TableJavaConverter {
         List<BeanProperty> properties = buildBeanProperties(table, bean);
         bean.setProperties(properties);
 
-        bean.addRequiredClassName("com.fxtech.panda.core.base.BaseBean");
+        bean.addRequiredClassName("com.djtech.robin.core.base.BaseBean");
         bean.setExtendClassName("BaseBean");
         bean.setEnableGetterSetter(true);
         bean.setEnableLombok(true);
@@ -53,7 +53,7 @@ public class TableJavaConverter {
         List<BeanProperty> properties = buildBeanProperties(table, bean);
         bean.setProperties(properties);
 
-        bean.addRequiredClassName("com.fxtech.panda.core.base.BaseCriteria");
+        bean.addRequiredClassName("com.djtech.robin.core.base.BaseCriteria");
         bean.setExtendClassName("BaseCriteria");
         bean.setEnableGetterSetter(true);
         bean.setEnableLombok(true);
@@ -73,7 +73,7 @@ public class TableJavaConverter {
         List<BeanProperty> properties = buildBeanProperties(table, bean);
         bean.setProperties(properties);
 
-        bean.addRequiredClassName("com.fxtech.panda.core.base.BaseRequest");
+        bean.addRequiredClassName("com.djtech.robin.core.base.BaseRequest");
         bean.setExtendClassName("BaseRequest");
         bean.setEnableGetterSetter(true);
         bean.setEnableLombok(true);
@@ -92,7 +92,7 @@ public class TableJavaConverter {
         List<BeanProperty> properties = buildBeanProperties(table, bean);
         bean.setProperties(properties);
 
-        bean.addRequiredClassName("com.fxtech.panda.core.base.BaseResponse");
+        bean.addRequiredClassName("com.djtech.robin.core.base.BaseResponse");
         bean.setExtendClassName("BaseResponse");
         bean.setEnableGetterSetter(true);
         bean.setEnableLombok(true);
@@ -221,7 +221,7 @@ public class TableJavaConverter {
             pkBean.addRequiredClassName(pkProp.getPropertyTypeClass());
         });
 
-        pkBean.addRequiredClassName("com.fxtech.panda.core.base.BasePk");
+        pkBean.addRequiredClassName("com.djtech.robin.core.base.BasePk");
         pkBean.setExtendClassName("BasePk");
         pkBean.setEnableGetterSetter(true);
         pkBean.setEnableLombok(true);

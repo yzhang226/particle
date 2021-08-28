@@ -38,7 +38,7 @@ public class JavaFileTest {
         option.removePrefixes = Lists.newArrayList("app_");
 
         option.rootArtifactId = "dolphin";
-        option.basePackageName = "com.fxtech.dolphin";
+        option.basePackageName = "com.djtech.dolphin";
 
         JavaFileGenerator fileGenerator = new JavaFileGenerator("/storage/tmp");
         DataSourceParam param = DatasourceLoader.buildJdbcParam("local_dev");

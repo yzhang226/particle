@@ -7,14 +7,14 @@
     <groupId>org.lightning.particle</groupId>
     <artifactId>particle</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.1</version>
+    <version>1.1.5</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
 
         <!-- particle -->
-        <particle.version>1.1.1</particle.version><!-- 升级版本, 记得更新此版本号 -->
+        <particle.version>1.1.5</particle.version><!-- 升级版本, 记得更新此版本号 -->
 
         <slf4j.version>1.7.25</slf4j.version>
         <common.collections>4.1</common.collections>
@@ -177,20 +177,20 @@
 
     <distributionManagement>
         <repository>
-            <id>fx-releases</id>
-            <url>http://nexus.fxdm.com/repository/maven-releases/</url>
+            <id>dj-releases</id>
+            <url>http://47.100.121.56/nexus/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>fx-snapshots</id>
-            <url>http://nexus.fxdm.com/repository/maven-snapshots/</url>
+            <id>dj-snapshots</id>
+            <url>http://47.100.121.56/nexus/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
     <repositories>
         <repository>
             <id>central</id>
-            <name>fx-public</name>
-            <url>http://nexus.fxdm.com/repository/maven-public/</url>
+            <name>dj-public</name>
+            <url>http://47.100.121.56/nexus/repository/maven-public/</url>
         </repository>
     </repositories>
 

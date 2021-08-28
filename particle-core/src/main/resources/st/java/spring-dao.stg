@@ -6,8 +6,8 @@ import <criteria.fullBeanName>;
 import <po.fullBeanName>;
 import <po.pk.fullBeanName>;
 
-import com.fxtech.panda.dao.capacity.CrudDao;
-import com.fxtech.panda.dao.common.Dao;
+import com.djtech.robin.dao.capacity.CrudDao;
+import com.djtech.robin.dao.common.Dao;
 import org.springframework.stereotype.Component;
 
 /**

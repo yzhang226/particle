@@ -9,10 +9,10 @@ import <response.fullBeanName>;
 import <criteria.fullBeanName>;
 import <po.pk.fullBeanName>;
 
-import com.fxtech.panda.core.model.paging.PagingRequest;
-import com.fxtech.panda.core.model.paging.PagingResponse;
-import com.fxtech.panda.core.reflect.BeanUtils;
-import com.fxtech.panda.dao.capacity.BaseBiz;
+import com.djtech.robin.core.model.paging.PagingRequest;
+import com.djtech.robin.core.model.paging.PagingResponse;
+import com.djtech.robin.core.reflect.BeanUtils;
+import com.djtech.robin.dao.capacity.BaseBiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;

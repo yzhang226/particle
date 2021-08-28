@@ -205,7 +205,7 @@ public class BeanInfo {
     }
 
     public BeanProperty getFirstPkProperty() {
-        return properties.get(0);
+        return pk.getProperties().get(0);
     }
 
 }
