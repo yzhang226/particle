@@ -3,6 +3,7 @@ package org.lightning.particle.jdbc.ds;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.lightning.particle.core.model.DbVendor;
 
 /**
  * Created by cook at 2018/7/8
@@ -45,5 +46,12 @@ public class DataSourceParam {
 
     private String tableNames;
 
+
+    public DbVendor guessDbVendorName() {
+        if (getDriverClassName().startsWith("com.sybase.")) {
+            return DbVendor.SYBASE;
+        }
+        return DbVendor.MYSQL;
+    }
 
 }

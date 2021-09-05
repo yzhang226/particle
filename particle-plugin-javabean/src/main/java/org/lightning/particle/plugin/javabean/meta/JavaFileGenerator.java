@@ -7,8 +7,10 @@ import org.lightning.particle.core.common.TemplateNameEnum;
 import org.lightning.particle.core.jdbc.meta.Table;
 import org.lightning.particle.core.model.BeanInfo;
 import org.lightning.particle.core.model.BeanProperty;
+import org.lightning.particle.core.model.DbVendor;
 import org.lightning.particle.core.template.STTemplateParser;
 import org.lightning.particle.core.template.TemplateContext;
+import org.lightning.particle.jdbc.ds.DataSourceParam;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,6 +29,8 @@ public class JavaFileGenerator {
 //    private TemplateContext context;
 
     private GenerateOptions options;
+
+    private DataSourceParam param;
 
     public JavaFileGenerator(String topDir) {
         this.topDir = topDir;
@@ -352,8 +356,14 @@ public class JavaFileGenerator {
 
     private TemplateContext createBaseMapperVarContext(BeanInfo daoBean, BeanInfo po,
                                                            BeanInfo criteria, Table table) {
-        TemplateContext context = new TemplateContext(TemplateNameEnum.BaseMapper.getTemplatePath(),
+        String baseMapperTemplatePath = TemplateNameEnum.BaseMapper.getTemplatePath();
+        if (DbVendor.SYBASE == param.guessDbVendorName()) {
+            baseMapperTemplatePath = "st/java/sybase/base-mapper.stg";
+        }
+
+        TemplateContext context = new TemplateContext(baseMapperTemplatePath,
                 TemplateNameEnum.BaseMapper.getTemplateName());
+
         context.addScopedVar("daoBean", daoBean);
         context.addScopedVar("entity", po);
         context.addScopedVar("criteria", criteria);
@@ -438,4 +448,7 @@ public class JavaFileGenerator {
         return options;
     }
 
+    public void setParam(DataSourceParam param) {
+        this.param = param;
+    }
 }

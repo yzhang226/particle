@@ -5,6 +5,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.lightning.particle.core.model.BeanInfo;
 import org.lightning.particle.core.jdbc.meta.Table;
+import org.lightning.particle.core.model.DbVendor;
 import org.lightning.particle.jdbc.ds.DataSourceParam;
 import org.lightning.particle.jdbc.meta.MetadataFetcher;
 import org.lightning.particle.jdbc.meta.MetadataFetcherFacotry;
@@ -32,6 +33,7 @@ public class JdbcJavaFileGenerator {
 
     public JdbcJavaFileGenerator(DataSourceParam param, GenerateOption option, JavaFileGenerator fileGenerator) {
         this.param = param;
+        fileGenerator.setParam(param);
         this.fetcher = MetadataFetcherFacotry.createFetcher(param);
         this.option = option;
         this.fileGenerator = fileGenerator;
@@ -195,6 +197,7 @@ public class JdbcJavaFileGenerator {
         fileGenerator.generateBizFile(serviceModule, po, request, response, criteria, dao, service, biz, option.isForceOverrideBiz());
 
         // mapper xml
+
         fileGenerator.generateBaseMapperFile(daoModule, dao, po, criteria, dbPackName,
                 table, option.isForceOverrideBaseMapper());
 
@@ -216,6 +219,5 @@ public class JdbcJavaFileGenerator {
             cleanJavaFileSuiteCarefully(tableName);
         }
     }
-
 
 }

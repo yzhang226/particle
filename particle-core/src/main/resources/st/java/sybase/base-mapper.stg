@@ -1,0 +1,171 @@
+baseMapper(daoBean, entity, criteria, table, options)
+::= <<
+\<?xml version="1.0" encoding="UTF-8"?>
+\<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+\<mapper namespace="<daoBean.packageName>.<daoBean.beanName>">
+
+    <! out ResultMap !>
+    \<resultMap id="BaseResultMap" type="<entity.packageName>.<entity.beanName>">
+        <entity.properties:outPkProperty4ResultMap();separator="">
+        <entity.properties:outProperty4ResultMap();separator="">
+    \</resultMap>
+
+    \<sql id="BaseColumnList">
+        <entity.properties:{prop|<prop.column.columnName>};separator=", ">
+    \</sql>
+
+    \<sql id="BaseColumnList2">
+        <entity.properties:{prop|<if(prop.column.primaryKey)>isnull(<prop.column.columnName> + 0, -1) as <prop.column.columnName><else><prop.column.columnName><endif>};separator=", ">
+    \</sql>
+
+    <! out where clause !>
+    \<sql id="BaseWhereClause">
+        \<where>
+            \<trim prefix="(" prefixOverrides="and" suffix=")">
+                <entity.properties:outPropertyWhereClause();separator="\n">
+            \</trim>
+        \</where>
+    \</sql>
+
+    \<sql id="CriteriaWhereClause">
+        \<where>
+            \<trim prefix="(" prefixOverrides="and" suffix=")">
+                <entity.properties:outPropertyCriteriaWhereClause();separator="\n">
+            \</trim>
+        \</where>
+    \</sql>
+
+    \<select id="getById" parameterType="<entity.pk.fullBeanName>" resultMap="BaseResultMap">
+        select \<include refid="BaseColumnList" />
+        from <table.tableName>
+        where
+        (
+        <entity.pk.properties:outPropertyPkPropClause((entity.pk.pkPrefix));separator=" and \n">
+        )
+    \</select>
+
+    \<insert id="save" parameterType="<entity.packageName>.<entity.beanName>"
+                <if(!entity.pk.multiplePk)>
+                keyColumn="<entity.firstPkProperty.column.columnName>" keyProperty="<entity.firstPkProperty.propertyName>" useGeneratedKeys="true"
+                <endif>
+            >
+        insert into <table.tableName>
+        \<trim prefix="(" suffix=")" suffixOverrides=",">
+            <entity.properties:outPropertyInsertFields();separator="\n">
+        \</trim>
+        \<trim prefix="values (" suffix=")" suffixOverrides=",">
+            <entity.properties:outPropertyInsertValues();separator="\n">
+        \</trim>
+    \</insert>
+
+    \<update id="update" parameterType="<entity.packageName>.<entity.beanName>">
+        update <table.tableName>
+        \<set>
+            <entity.properties:outPropertyUpdateClause();separator="\n">
+        \</set>
+        where
+        (
+        <entity.pk.properties:outPropertyPkPropClause((entity.pk.pkPrefix));separator=" and \n">
+        )
+    \</update>
+
+    \<select id="query" resultMap="BaseResultMap" parameterType="map" >
+        \<bind name="tempTblName" value="'q_tbl_<table.tableName>_' + @com.fxtech.panda.core.utils.LocalDateUtils@currentSimpleFormattedDate() + '_' + @org.apache.commons.lang3.RandomStringUtils@randomAlphabetic(12)" />
+        \<bind name="tempTblNameUp" value="tempTblName.toUpperCase()"/>
+        \<bind name="end_offset" value=" offset + limit " />
+
+        set rowcount ${end_offset}
+        SELECT ID_KEY = identity(5), \<include refid="BaseColumnList2" /> INTO ${tempTblNameUp} FROM <table.tableName> ORDER BY <table.primaryKeys:{col|<col.columnName>};separator=", ">
+
+        SELECT \<include refid="BaseColumnList" /> FROM ${tempTblNameUp} WHERE ID_KEY > #{offset} and ID_KEY &lt;= #{end_offset}
+        drop table ${tempTblNameUp}
+        set rowcount 0
+
+    \</select>
+
+    \<select id="count" parameterType="<criteria.packageName>.<criteria.beanName>" resultType="java.lang.Long">
+        select count(1) as cnt
+        from <table.tableName>
+        \<include refid="BaseWhereClause" />
+    \</select>
+
+    \<insert id ="batchSave" parameterType="java.util.List" >
+        insert into <table.tableName> (\<include refid="BaseColumnList" />)
+        values
+        \<foreach collection ="list" item="ro" index="index" separator=",">
+        \<trim prefix="(" suffix=")" suffixOverrides=",">
+            <entity.properties:{prop|#{ro.<prop.propertyName>\}};separator=",">
+        \</trim>
+        \</foreach>
+    \</insert>
+
+    \<update id="batchUpdate" parameterType="java.util.List">
+        \<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update <table.tableName>
+            \<set>
+                <entity.properties:outPropertyUpdateClauseWithItem();separator="\n">
+            \</set>
+            where
+            (
+            <entity.pk.properties:outPropertyPkPropClauseWithItem((entity.pk.pkPrefix));separator=" and \n">
+            )
+        \</foreach>
+    \</update>
+
+\</mapper>
+>>
+
+
+outPkProperty4ResultMap(prop)
+::= <<
+<if(prop.column.primaryKey)>
+\<id column="<prop.column.columnName>" jdbcType="<prop.jdbcTypeName>" property="<prop.propertyName>" />
+<endif>
+>>
+
+outProperty4ResultMap(prop)
+::= <<
+<if(!prop.column.primaryKey)>
+\<result column="<prop.column.columnName>" jdbcType="<prop.jdbcTypeName>" property="<prop.propertyName>" />
+<endif>
+>>
+
+outPropertyWhereClause(prop)
+::= <<
+\<if test="<prop.propertyName> != null">and <prop.column.columnName> = #{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}\</if>
+>>
+
+outPropertyCriteriaWhereClause(prop)
+::= <<
+\<if test="criteria.<prop.propertyName> != null">and <prop.column.columnName> = #{criteria.<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}\</if>
+>>
+
+outPropertyInsertFields(prop)
+::= <<
+\<if test="<prop.propertyName> != null"><prop.column.columnName>,\</if>
+>>
+
+outPropertyInsertValues(prop)
+::= <<
+\<if test="<prop.propertyName> != null">#{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>},\</if>
+>>
+
+outPropertyUpdateClause(prop)
+::= <<
+<if(!prop.column.primaryKey)>\<if test="<prop.propertyName> != null"><prop.column.columnName> = #{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>},\</if><endif>
+>>
+
+outPropertyPkPropClause(prop, prefix)
+::= <<
+<prop.column.columnName> = #{<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}
+>>
+
+outPropertyUpdateClauseWithItem(prop)
+::= <<
+<if(!prop.column.primaryKey)>\<if test="item.<prop.propertyName> != null"><prop.column.columnName> = #{item.<prop.propertyName>,jdbcType=<prop.jdbcTypeName>},\</if><endif>
+>>
+
+outPropertyPkPropClauseWithItem(prop, prefix)
+::= <<
+<prop.column.columnName> = #{item.<prop.propertyName>,jdbcType=<prop.jdbcTypeName>}
+>>

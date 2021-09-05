@@ -97,3 +97,4 @@ fabric.properties
 
 *.iml
 
+upgrade-version.sh
